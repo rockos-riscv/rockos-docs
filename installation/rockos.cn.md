@@ -1,3 +1,5 @@
+# RockOS镜像刷写教程
+
 ## 演示环境
 
 主机系统版本:Ubuntu22.04 
@@ -44,63 +46,65 @@ USB Type A 转 USB Type C接入编号15Type-C USB连接器。
 
 ![](./image%20for%20flash/uart.png)
 
-```
+```bash
 sudo minicom -D /dev/ttyUSB2 -b 115200
 ```
 
 插入准备好的含有bootloader文件的U盘。
 
-按下电源键启动后，观察minicom窗口内，按Ctrl+C打断机器。
+按下电源键启动后，观察minicom窗口内，按Ctrl+C或enter打断U-Boot 加载。
 
-![](./image%20for%20flash/打断启动.png)
+![](./image%20for%20flash/Interrupt.png)
 
 执行下面的命令，查看U盘内的文件。
 
-```
+```bash
 usb start
 
 fatls usb 0
 ```
 
-![](./image%20for%20flash/查看u盘.png)
+![](./image%20for%20flash/check-usb.png)
 
 确认U盘内文件正确后执行下面命令
 
-```
+```bash
 fatload usb 0 0x90000000 bootloader_secboot_ddr5_hifive-p550.bin
+
+es_burn write 0x90000000 flash
 ```
 
 ![]()
 
 重启后再次打断机器执行分区（第一次刷写必选，需要给分区足够大小容纳刷写boot/root）
 
-```
+```bash
 reset 
 # 打断uboot启动
 run gpt_partition 
 ```
 
-![](./image%20for%20flash/执行分区.png)
+![](./image%20for%20flash/gpt_partition.png)
 
 ### boot&rootfs
 
 在启动并打断机器后输入以下命令进入fastboot状态
 
-```
+```bash
 fastboot usb 0
 ```
 
-![](./image%20for%20flash/进入fastboot状态.png)
+![](./image%20for%20flash/fastboot0.png)
 
 在主机上另开一个终端，执行刷写命令
 
-```
+```bash
 sudo fastboot flash boot boot-eswin_evb-20241015-120631.ext4 # 刷写boot
 sudo fastboot flash root root-eswin_evb-20241015-120631.ext4 # 刷写rootfs
-# 请注意文件路径 刷写时间大约在5-10分钟左右
+# 请注意文件路径 刷写时间大约在10分钟左右
 ```
 
-返回minicom端口后按下Ctrl+C 取消 fastboot 状态，随后执行reset重启机器。
+返回minicom端口后按下Ctrl+C或enter 取消 fastboot 状态，随后执行reset重启机器。
 
 至此rockOS镜像刷写完成。
 
