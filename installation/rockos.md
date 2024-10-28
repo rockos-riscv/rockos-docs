@@ -39,11 +39,11 @@ According to Section 3.1.6 of the [official user manual](https://sifive.cdn.pris
 
 First, establish a serial connection to the board. Once the cables are correctly connected, the board will be listed as four UARTs.
 
-![](./image%20for%20flash/tty.png)
+![tty](./image%20for%20flash/tty.png)
 
 Following Section 2.1.1.1 of the [MCU User Manual](https://www.sifive.cn/api/document-file?uid=premier-p550-mcu-user-manual), set the ttyUSB2 as the connection path in minicom, and set the baud rate to 115200.
 
-![](./image%20for%20flash/uart.png)
+![uart](./image%20for%20flash/uart.png)
 
 ```bash
 sudo minicom -D /dev/ttyUSB2 -b 115200
@@ -53,17 +53,17 @@ Insert the prepared USB drive containing the bootloader file.
 
 After pressing the power button to boot, observe the minicom window and interrupt the U-Boot booting by pressing Ctrl+C or enter.
 
-![](./image%20for%20flash/Interrupt.png)
+![intetrupt](./image%20for%20flash/Interrupt.png)
 
 Execute the following commands to check the files on the USB drive:
 
 ```bash
 usb start
 
-fatls usb 0
+fatls usb 0 / # If multiple files are present on the USB drive, please confirm the storage path of the bootloader file.
 ```
 
-![](./image%20for%20flash/check-usb.png)
+![usb](./image%20for%20flash/check-usb.png)
 
 After verifying the correct files on the USB drive, execute the following commands:
 
@@ -73,8 +73,6 @@ fatload usb 0 0x90000000 bootloader_secboot_ddr5_hifive-p550.bin
 es_burn write 0x90000000 flash
 ```
 
-![]()
-
 After rebooting, interrupt the U-Boot booting again and execute the partitioning command (required for the first flash to allocate sufficient space for the boot/root images).
 
 ```bash
@@ -83,17 +81,17 @@ reset
 run gpt_partition
 ```
 
-![](./image%20for%20flash/gpt_partition.png)
+![partition](./image%20for%20flash/gpt_partition.png)
 
 ### Boot & Rootfs
 
-After booting and interrupting the U-Boot booting, enter the following command to enter fastboot mode:
+After starting and interrupting the machine, enter the following command to enter fastboot mode. (Make sure to disconnect the USB Type A to USB Type A cable beforehand to avoid circuit or communication conflicts.)
 
 ```bash
 fastboot usb 0
 ```
 
-![](./image%20for%20flash/fastboot0.png)
+![fastboot](./image%20for%20flash/fastboot0.png)
 
 Open another terminal on the host and execute the following flashing commands:
 
@@ -107,4 +105,4 @@ Return to the minicom terminal, press Ctrl+C or enter to exit fastboot mode, and
 
 At this point, the RockOS image flashing is complete.
 
-![](./image%20for%20flash/neofetch.png)
+![neofetch](./image%20for%20flash/neofetch.png)
