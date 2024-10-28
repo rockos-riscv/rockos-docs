@@ -96,8 +96,8 @@ fastboot usb 0
 Open another terminal on the host and execute the following flashing commands:
 
 ```bash
-sudo fastboot flash boot boot-eswin_evb-20241015-120631.ext4   # Flash boot
-sudo fastboot flash root root-eswin_evb-20241015-120631.ext4   # Flash rootfs
+sudo fastboot flash boot boot-eswin_evb-20241024-145708.ext4   # Flash boot
+sudo fastboot flash root root-eswin_evb-20241024-145708.ext4   # Flash rootfs
 # Ensure the file paths are correct; flashing time may take 10 minutes
 ```
 

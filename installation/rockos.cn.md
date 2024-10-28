@@ -97,8 +97,8 @@ fastboot usb 0
 在主机上另开一个终端，执行刷写命令
 
 ```bash
-sudo fastboot flash boot boot-eswin_evb-20241015-120631.ext4 # 刷写boot
-sudo fastboot flash root root-eswin_evb-20241015-120631.ext4 # 刷写rootfs
+sudo fastboot flash boot boot-eswin_evb-20241024-145708.ext4 # 刷写boot
+sudo fastboot flash root root-eswin_evb-20241024-145708.ext4 # 刷写rootfs
 # 请注意文件路径 刷写时间大约在10分钟左右
 ```
 
