@@ -18,11 +18,11 @@ fastboot 版本：28.0.2-debian
 
 ### 镜像下载
 
-- bootloader：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/bootloader_secboot_ddr5_hifive-p550.bin)
+- bootloader：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/bootloader_secboot_ddr5_hifive-p550.bin)
 
-- boot：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/boot-eswin_evb-20241015-120631.ext4.zst)
+- boot：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/boot-eswin_evb-20241024-145708.ext4.zst)
 
-- rootfs：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/root-eswin_evb-20241015-120631.ext4.zst)
+- rootfs：[点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/root-eswin_evb-20241024-145708.ext4.zst)
 
 boot 及 rootfs 请下载后进行解压，bootloader 文件下载完成后请拷贝到已经格式化为 FAT32 的 U 盘中。
 

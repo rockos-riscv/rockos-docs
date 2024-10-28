@@ -18,11 +18,11 @@ Fastboot Version: 28.0.2-debian
 
 ### Image Downloads
 
-- Bootloader: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/bootloader_secboot_ddr5_hifive-p550.bin)
+- Bootloader: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/bootloader_secboot_ddr5_hifive-p550.bin)
 
-- Boot: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/boot-eswin_evb-20241015-120631.ext4.zst)
+- Boot: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/boot-eswin_evb-20241024-145708.ext4.zst)
 
-- Rootfs: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/0930/20241015/root-eswin_evb-20241015-120631.ext4.zst)
+- Rootfs: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/root-eswin_evb-20241024-145708.ext4.zst)
 
 After downloading, please extract the boot and rootfs files. Copy the bootloader file to the USB drive formatted in FAT32.
 
