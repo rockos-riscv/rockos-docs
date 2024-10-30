@@ -40,11 +40,11 @@ USB Type A 转 USB Type C 接入编号 15Type-C USB 连接器。
 
 首先通过串口连接到开发板，在线缆正确接入开发板后，会列举为四个 UART。
 
-![tty](./image-for-flash/tty.png)
+![tty](./image%20for%20flash/tty.png)
 
 根据[MCU 用户手册](https://www.sifive.cn/api/document-file?uid=premier-p550-mcu-user-manual)中 2.1.1.1 节的内容，我们在 minicom 中将 ttyUSB2 设置为连接路径，波特率设置为 115200。
 
-![uart](./image-for-flash/uart.png)
+![uart](./image%20for%20flash/uart.png)
 
 ```bash
 sudo minicom -D /dev/ttyUSB2 -b 115200
@@ -54,7 +54,7 @@ sudo minicom -D /dev/ttyUSB2 -b 115200
 
 按下电源键启动后，观察 minicom 窗口内，按任意键打断 U-Boot 加载。
 
-![interrupt](./image-for-flash/Interrupt.png)
+![interrupt](./image%20for%20flash/Interrupt.png)
 
 执行下面的命令，查看 U 盘内的文件。
 
@@ -64,7 +64,7 @@ usb start
 fatls usb 0 / # 如U盘内存在多个文件时请确认bootloader文件的存放路径
 ```
 
-![usb](./image-for-flash/check-usb.png)
+![usb](./image%20for%20flash/check-usb.png)
 
 确认 U 盘内文件正确后执行下面命令
 
@@ -82,7 +82,7 @@ reset
 run gpt_partition 
 ```
 
-![partition](./image-for-flash/gpt_partition.png)
+![partition](./image%20for%20flash/gpt_partition.png)
 
 ### Boot&Rootfs
 
@@ -92,7 +92,7 @@ run gpt_partition
 fastboot usb 0
 ```
 
-![fastboot](./image-for-flash/fastboot0.png)
+![fastboot](./image%20for%20flash/fastboot0.png)
 
 在主机上另开一个终端，执行刷写命令
 
@@ -106,4 +106,4 @@ sudo fastboot flash root root-eswin_evb-20241024-145708.ext4 # 刷写rootfs
 
 至此 rockOS 镜像刷写完成。
 
-![neofetch](./image-for-flash/neofetch.png)
+![neofetch](./image%20for%20flash/neofetch.png)
