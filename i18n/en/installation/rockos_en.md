@@ -39,11 +39,11 @@ According to Section 3.1.6 of the [official user manual](https://sifive.cdn.pris
 
 First, establish a serial connection to the board. Once the cables are correctly connected, the board will be listed as four UARTs.
 
-![tty](./image%20for%20flash/tty.png)
+![tty](../image-for-flash/tty.png)
 
 Following Section 2.1.1.1 of the [MCU User Manual](https://www.sifive.cn/api/document-file?uid=premier-p550-mcu-user-manual), set the ttyUSB2 as the connection path in minicom, and set the baud rate to 115200.
 
-![uart](./image%20for%20flash/uart.png)
+![uart](../image-for-flash/uart.png)
 
 ```bash
 sudo minicom -D /dev/ttyUSB2 -b 115200
@@ -53,7 +53,7 @@ Insert the prepared USB drive containing the bootloader file.
 
 After pressing the power button to boot, observe the minicom window and interrupt the U-Boot booting by pressing Ctrl+C or enter.
 
-![intetrupt](./image%20for%20flash/Interrupt.png)
+![intetrupt](../image-for-flash/Interrupt.png)
 
 Execute the following commands to check the files on the USB drive:
 
@@ -63,7 +63,7 @@ usb start
 fatls usb 0 / # If multiple files are present on the USB drive, please confirm the storage path of the bootloader file.
 ```
 
-![usb](./image%20for%20flash/check-usb.png)
+![usb](../image-for-flash/check-usb.png)
 
 After verifying the correct files on the USB drive, execute the following commands:
 
@@ -81,7 +81,7 @@ reset
 run gpt_partition
 ```
 
-![partition](./image%20for%20flash/gpt_partition.png)
+![partition](../image-for-flash/gpt_partition.png)
 
 ### Boot & Rootfs
 
@@ -91,7 +91,7 @@ After starting and interrupting the machine, enter the following command to ente
 fastboot usb 0
 ```
 
-![fastboot](./image%20for%20flash/fastboot0.png)
+![fastboot](../image-for-flash/fastboot0.png)
 
 Open another terminal on the host and execute the following flashing commands:
 
@@ -105,4 +105,4 @@ Return to the minicom terminal, press Ctrl+C or enter to exit fastboot mode, and
 
 At this point, the RockOS image flashing is complete.
 
-![neofetch](./image%20for%20flash/neofetch.png)
+![neofetch](../image-for-flash/neofetch.png)
