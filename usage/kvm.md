@@ -1,24 +1,238 @@
 # RockOS KVM Demo
 
+RockOS supports KVM virtualization based on H Extension (RISC-V Hypervisor Extension).
+
+Currently the following are verifed as working:
+
+- Ubuntu 24.04.1 LTS & 24.10
+- openEuler 24.03 LTS & 24.09
+- FreeBSD 14.1-RELEASE
+- Debian testing netinst CD
+
 ## Environment
 
-- OS Version: 20241103
+- OS Version: RockOS [20241112](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/)
 - Ubuntu preinstalled image: https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
-    - You can try other mirrors if the official server is too slow for you
+- openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
+- FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
+- Debian testing netinst CD: https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
 - `qemu-system-riscv64` is installed by default
 - Manually install `wget` or `curl` to download the image
+- `u-boot-qemu` is provided in the repo, manually install it if needed
 
-## Prerequisites
+> You can try other mirrors if the official server is too slow for you.
 
-Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is enabled. See comments [here](https://github.com/qemu/qemu/blob/fdf250e5a37830615e324017cb3a503e84b3712c/hw/riscv/virt.c#L1354).
+## Steps
 
-The only way to start a KVM for now is using `initrd` and `kernel` flags.
+Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is enabled. See comments [here](https://github.com/qemu/qemu/blob/fdf250e5a37830615e324017cb3a503e84b3712c/hw/riscv/virt.c#L1354). So here are some of the options we have now:
 
-Thus we need to extract `initrd` and `vmlinuz` images from the Ubuntu preinstalled image.
+- Use `u-boot.elf` provided by `u-boot-qemu` package
+    - You can boot Ubuntu and FreeBSD with this method.
+- Use other firmwares
+    - e.g. openEuler RISC-V + EDK II (distributed along side with system image)
+- Use `-initrd` `-kernel` `-append` flags
+    - You can boot Ubuntu with this method.
+    - The BusyBox KVM Demo is also using this method.
+    - You can also boot FreeBSD this way according to [FreeBSD Wiki](https://wiki.freebsd.org/riscv/QEMU#Boot_FreeBSD).
+        - Not tested & not demonstrated in this article.
 
-We're using Ubuntu 24.10 preinstalled server image as an example here. Feel free try other distros as well using the same method below.
+By default RockOS does not load KVM module on boot, so before we start, manually load it:
 
 ```shell
+sudo modprobe kvm
+```
+
+### Method A: Acquire U-Boot from u-boot-qemu package
+
+We're using Ubuntu preinstalled server image and FreeBSD as examples here.
+
+#### Ubuntu
+
+```shell
+sudo apt update; sudo apt install -y wget u-boot-qemu
+wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
+xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
+sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
+        -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
+```
+
+The default username and password are both `ubuntu`.
+
+For Ubuntu preinstalled image, you'll be prompted to change your password on first boot. Follow the steps and you're good to go.
+
+#### FreeBSD
+
+```shell
+sudo apt update; sudo apt install -y wget u-boot-qemu
+wget https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
+xz -dkv -T0 FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
+sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
+        -drive file=FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2,format=qcow2,if=virtio
+```
+
+Use username `root` for a passwordless login.
+
+After the installation process, power off the VM, delete `-boot d -cdrom debian-testing-riscv64-netinst.iso \`, and then you can boot straight into the installed system.
+
+#### Debian testing netinst CD
+
+```shell
+sudo apt update; sudo apt install -y wget u-boot-qemu
+wget https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
+qemu-img create -f qcow2 debian.qcow2 16G
+sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
+        -boot d -cdrom debian-testing-riscv64-netinst.iso \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
+        -drive file=debian.qcow2,format=qcow2,if=virtio
+```
+
+Execute the commands above will create a 16G qcow2 disk image, and bring you to the Debian installer.
+
+### Method B: Use other firmwares (e.g. TianoCore EDK II)
+
+We're using openEuler RISC-V 24.09 as example here.
+
+Obtain and decompress the image:
+
+```shell
+sudo apt update; sudo apt install -y wget
+wget https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_CODE.fd \
+     https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_VARS.fd \
+     https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/openEuler-24.09-riscv64.qcow2.xz \
+     https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/start_vm.sh
+xz -dkv -T0 openEuler-24.09-riscv64.qcow2.xz
+```
+
+Modify the VM start script:
+
+```shell
+nano start_vm.sh
+```
+
+The following parts need to be changed:
+
+- Add `--enable-kvm` flag
+- Change RAM allocate size: `memory=2` for 2G
+    - `ram1` and `ram2` also need to be changed:`object memory-backend-ram,size=1G,id=ram1` `object memory-backend-ram,size=1G,id=ram2`
+- Add `if=none` flag to boot disk
+
+The edited script should look like this:
+
+```shell
+#!/usr/bin/env bash
+
+# The script is created for starting a riscv64 qemu virtual machine with specific parameters.
+
+RESTORE=$(echo -en '\001\033[0m\002')
+YELLOW=$(echo -en '\001\033[00;33m\002')
+
+## Configuration
+vcpu=2
+memory=2
+drive="$(ls *.qcow2)"
+fw1="RISCV_VIRT_CODE.fd"
+fw2="RISCV_VIRT_VARS.fd"
+ssh_port=12055
+
+cmd="qemu-system-riscv64 \
+  -nographic -machine virt,pflash0=pflash0,pflash1=pflash1,acpi=off \
+  --enable-kvm \
+  -smp "$vcpu" -m "$memory"G \
+  -object memory-backend-ram,size=1G,id=ram1 \
+  -numa node,memdev=ram1 \
+  -object memory-backend-ram,size=1G,id=ram2 \
+  -numa node,memdev=ram2 \
+  -blockdev node-name=pflash0,driver=file,read-only=on,filename="$fw1" \
+  -blockdev node-name=pflash1,driver=file,filename="$fw2" \
+  -drive file="$drive",format=qcow2,id=hd0,if=none \
+  -object rng-random,filename=/dev/urandom,id=rng0 \
+  -device virtio-vga \
+  -device virtio-rng-device,rng=rng0 \
+  -device virtio-blk-device,drive=hd0 \
+  -device virtio-net-device,netdev=usernet \
+  -netdev user,id=usernet,hostfwd=tcp::"$ssh_port"-:22 \
+  -device qemu-xhci -usb -device usb-kbd -device usb-tablet"
+
+echo ${YELLOW}:: Starting VM...${RESTORE}
+echo ${YELLOW}:: Using following configuration${RESTORE}
+echo ""
+echo ${YELLOW}vCPU Cores: "$vcpu"${RESTORE}
+echo ${YELLOW}Memory: "$memory"G${RESTORE}
+echo ${YELLOW}Disk: "$drive"${RESTORE}
+echo ${YELLOW}SSH Port: "$ssh_port"${RESTORE}
+echo ""
+echo ${YELLOW}:: NOTE: Make sure ONLY ONE .qcow2 file is${RESTORE}
+echo ${YELLOW}in the current directory${RESTORE}
+echo ""
+echo ${YELLOW}:: Tip: Try setting DNS manually if QEMU user network doesn\'t work well. ${RESTORE}
+echo ${YELLOW}:: HOWTO -\> https://serverfault.com/a/810639 ${RESTORE}
+echo ""
+echo ${YELLOW}:: Tip: If \'ping\' reports permission error, try reinstalling \'iputils\'. ${RESTORE}
+echo ${YELLOW}:: HOWTO -\> \'sudo dnf reinstall iputils\' ${RESTORE}
+echo ""
+
+sleep 2
+
+eval $cmd
+```
+
+Start the KVM:
+
+```shell
+sudo bash start_vm.sh
+```
+
+Or manually execute:
+
+```shell
+sudo qemu-system-riscv64 \
+  -nographic -machine virt,pflash0=pflash0,pflash1=pflash1,acpi=off \
+  --enable-kvm \
+  -smp 2 -m 2G \
+  -object memory-backend-ram,size=1G,id=ram1 \
+  -numa node,memdev=ram1 \
+  -object memory-backend-ram,size=1G,id=ram2 \
+  -numa node,memdev=ram2 \
+  -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
+  -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
+  -drive file=openEuler-24.09-riscv64.qcow2,format=qcow2,id=hd0,if=none \
+  -object rng-random,filename=/dev/urandom,id=rng0 \
+  -device virtio-vga \
+  -device virtio-rng-device,rng=rng0 \
+  -device virtio-blk-device,drive=hd0 \
+  -device virtio-net-device,netdev=usernet \
+  -netdev user,id=usernet,hostfwd=tcp::12055-:22 \
+  -device qemu-xhci -usb -device usb-kbd -device usb-tablet
+```
+
+Default username: `root` or `openeuler`
+
+Default password: `openEuler12#$`
+
+If needed, you can press ESC to interrupt EDK II autoboot while promting `Press ESCAPE within 5 seconds for boot options`, and enter EDK II menu to edit settings.
+
+### Method C: Directly load vmlinuz and initrd
+
+In RockOS system image, we have a `busybox` based KVM demo built in, at `/home/debian` for users to try out.
+
+Usage: just execute `/home/debian/start_kvm.sh`.
+
+Aside from that, you can also boot Ubuntu using the similar steps.
+
+You'll need to extract `initrd` and `vmlinuz` images from the disk image.
+
+Use the steps below:
+
+```shell
+sudo apt update; sudo apt install wget
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -d ubuntu-24.10-preinstalled-server-riscv64.img.xz
 sudo losetup -f # Check the first available loop device, usually /dev/loop0
@@ -30,19 +244,6 @@ cp /mnt/boot/initrd.img .
 sudo cp /mnt/boot/vmlinuz .
 sudo umount /mnt
 sudo losetup -D # Detach all loop devices
-```
-
-By default RockOS does not load KVM module on boot, you'll need to manually load it:
-
-```shell
-sudo modprobe kvm
-```
-
-## Start KVM
-
-Run:
-
-```shell
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
         -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
         -device virtio-rng-pci \
@@ -52,18 +253,30 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
         -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
 ```
 
-Starts the virtual machine.
-
 The default username and password are both `ubuntu`.
 
 For Ubuntu preinstalled image, you'll be prompted to change your password on first boot. Follow the steps and you're good to go.
 
-The asciicast record below is a typical Ubuntu KVM setup process.
+## Screen Records
 
-[![asciicast](https://asciinema.org/a/RwVMUxQrZgJmtCmhcVmsNGe7k.svg)](https://asciinema.org/a/RwVMUxQrZgJmtCmhcVmsNGe7k)
+Here are some asciinema screen records during the boot process for your reference.
 
-## Other info
+Ubuntu 24.10 + U-Boot:
 
-Aside from the Ubuntu KVM setup, there's a `busybox` based KVM demo located in `/home/debian` for users to try out.
+[![Ubuntu 24.10 + U-Boot](https://asciinema.org/a/jrmdPqSD8TiuzhopnTqEs0fCm.svg)](https://asciinema.org/a/jrmdPqSD8TiuzhopnTqEs0fCm)
 
-Usage: just execute `/home/debian/start_kvm.sh`.
+Ubuntu 24.10, initrd + vmlinuz:
+
+[![Ubuntu 24.10, initrd + vmlinuz](https://asciinema.org/a/0nXvzFMvx6B6tJjAKekzwNePq.svg)](https://asciinema.org/a/0nXvzFMvx6B6tJjAKekzwNePq)
+
+openEuler 24.09 + TianoCore EDK II:
+
+[![openEuler 24.09 + TianoCore EDK II](https://asciinema.org/a/MXla56oCKEFoZ4VUWsCnok8hk.svg)](https://asciinema.org/a/MXla56oCKEFoZ4VUWsCnok8hk)
+
+FreeBSD 14.1-RELEASE + U-Boot:
+
+[![FreeBSD 14.1-RELEASE + U-Boot](https://asciinema.org/a/RwmDjwLwcHCiUErBTSU4ovNlX.svg)](https://asciinema.org/a/RwmDjwLwcHCiUErBTSU4ovNlX)
+
+Debian testing netinst CD + U-Boot:
+
+[![Debian testing netinst CD + U-Boot](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav.svg)](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav)
