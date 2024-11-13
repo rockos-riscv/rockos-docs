@@ -78,8 +78,6 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 Use username `root` for a passwordless login.
 
-After the installation process, power off the VM, delete `-boot d -cdrom debian-testing-riscv64-netinst.iso \`, and then you can boot straight into the installed system.
-
 #### Debian testing netinst CD
 
 ```shell
@@ -95,6 +93,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 ```
 
 Execute the commands above will create a 16G qcow2 disk image, and bring you to the Debian installer.
+
+After the installation process, power off the VM, delete `-boot d -cdrom debian-testing-riscv64-netinst.iso \`, and then you can boot straight into the installed system.
 
 ### Method B: Use other firmwares (e.g. TianoCore EDK II)
 
