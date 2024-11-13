@@ -44,7 +44,7 @@ sudo modprobe kvm
 
 ### Method A: Acquire U-Boot from u-boot-qemu package
 
-We're using Ubuntu preinstalled server image and FreeBSD as examples here.
+For this method, we have Ubuntu preinstalled server image, FreeBSD and Debian netinst CD as examples.
 
 #### Ubuntu
 

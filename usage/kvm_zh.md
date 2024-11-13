@@ -44,7 +44,7 @@ sudo modprobe kvm
 
 ### 方法一：使用 u-boot-qemu 软件包提供的 U-Boot
 
-此处分别以 Ubuntu 预安装服务器镜像和 FreeBSD 为例。
+以 Ubuntu 预安装服务器镜像、FreeBSD 和 Debian netinst CD 为例。
 
 #### Ubuntu
 
