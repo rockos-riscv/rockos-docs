@@ -11,7 +11,8 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 
 ## 演示环境
 
-- 系统版本：RockOS 20241112: https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/
+- 系统版本：RockOS [20241112](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/)
+        - 软件源：RockOS [20241130](https://mirror.iscas.ac.cn/rockos/20241130/)
 - Ubuntu 预安装镜像：https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -43,6 +44,13 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 sudo modprobe kvm
 ```
 
+此外，需要将软件源更新至 `20241130`，以获取最新的软件包：
+
+```shell
+sudo sed -i 's/20241030/20241130/g' /etc/apt/sources.list.d/0000sources.list
+sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
+```
+
 ### 方法一：使用 u-boot-qemu 软件包提供的 U-Boot
 
 以 Ubuntu 预安装服务器镜像、FreeBSD 和 Debian netinst CD 为例。
@@ -50,7 +58,6 @@ sudo modprobe kvm
 #### Ubuntu
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -67,7 +74,6 @@ Ubuntu 的预安装镜像在首次启动时会提示修改密码，按提示操�
 #### FreeBSD
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
 xz -dkv -T0 FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -82,7 +88,6 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 #### Debian testing netinst CD
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
 qemu-img create -f qcow2 debian.qcow2 16G
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -110,7 +115,6 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 获取并解压系统镜像：
 
 ```shell
-sudo apt update; sudo apt install -y wget
 wget https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_CODE.fd \
      https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_VARS.fd \
      https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/openEuler-24.09-riscv64.qcow2.xz \
@@ -229,7 +233,6 @@ sudo qemu-system-riscv64 \
 #### Ubuntu
 
 ```shell
-sudo apt update && sudo apt install -y qemu-efi-riscv64 wget
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
 cp /usr/share/qemu-efi-riscv64/RISCV_VIRT_*.fd .
@@ -252,7 +255,6 @@ RockOS 的系统镜像中，在 `/home/debian` 目录下自带了一个基于 `b
 方法如下。
 
 ```shell
-sudo apt update; sudo apt install wget
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
 sudo losetup -f # 检查第一个可用的 loop 设备，一般默认为 /dev/loop0
@@ -303,8 +305,5 @@ Debian testing netinst CD + U-Boot:
 
 ## 其他说明
 
-- 确保系统版本为 RockOS 20241112 或更新。
-- 确保内核版本为 `6.6.60-win2030 #2024.11.12.15.41+f65fc3e21` 或更新。
-- 如使用 RockOS 提供的 `qemu-efi-riscv64` 包，确保版本为 `2024.08-4` 或更新。
 - 使用 EDK II 时，确保添加了 `acpi=off` 选项。
 - 若 EDK II 不能正常进入系统，可尝试在 EDK II 菜单内手动选择引导设备，或者在 EFI Shell 内手动启动 boot 分区的 EFI 文件。

@@ -12,6 +12,7 @@ Currently the following are verifed as working:
 ## Environment
 
 - OS Version: RockOS [20241112](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/)
+        - Repo: RockOS [20241130](https://mirror.iscas.ac.cn/rockos/20241130/)
 - Ubuntu preinstalled image: https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -43,6 +44,13 @@ By default RockOS does not load KVM module on boot, so before we start, manually
 sudo modprobe kvm
 ```
 
+Also we need to change repo to `20241130` for latest packages:
+
+```shell
+sudo sed -i 's/20241030/20241130/g' /etc/apt/sources.list.d/0000sources.list
+sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
+```
+
 ### Method A: Acquire U-Boot from u-boot-qemu package
 
 For this method, we have Ubuntu preinstalled server image, FreeBSD and Debian netinst CD as examples.
@@ -50,7 +58,6 @@ For this method, we have Ubuntu preinstalled server image, FreeBSD and Debian ne
 #### Ubuntu
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -67,7 +74,6 @@ For Ubuntu preinstalled image, you'll be prompted to change your password on fir
 #### FreeBSD
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
 xz -dkv -T0 FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -82,7 +88,6 @@ Use username `root` for a passwordless login.
 #### Debian testing netinst CD
 
 ```shell
-sudo apt update; sudo apt install -y wget u-boot-qemu
 wget https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
 qemu-img create -f qcow2 debian.qcow2 16G
 sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
@@ -110,7 +115,6 @@ For openEuler use the EDK II firmware distributed with the main system image; fo
 Obtain and decompress the image:
 
 ```shell
-sudo apt update; sudo apt install -y wget
 wget https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_CODE.fd \
      https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/RISCV_VIRT_VARS.fd \
      https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/openEuler-24.09-riscv64.qcow2.xz \
@@ -229,7 +233,6 @@ If needed, you can press ESC to interrupt EDK II autoboot while promting `Press 
 #### Ubuntu
 
 ```shell
-sudo apt update && sudo apt install -y qemu-efi-riscv64 wget
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
 cp /usr/share/qemu-efi-riscv64/RISCV_VIRT_*.fd .
@@ -254,7 +257,6 @@ You'll need to extract `initrd` and `vmlinuz` images from the disk image.
 Use the steps below:
 
 ```shell
-sudo apt update; sudo apt install wget
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 xz -d ubuntu-24.10-preinstalled-server-riscv64.img.xz
 sudo losetup -f # Check the first available loop device, usually /dev/loop0
@@ -305,8 +307,5 @@ Debian testing netinst CD + U-Boot:
 
 ## Notes
 
-- Make sure you're using RockOS 20241112 or later.
-- Make sure you're using Linux kernel `6.6.60-win2030 #2024.11.12.15.41+f65fc3e21` or later.
-- If you're using `qemu-efi-riscv64` provided by RockOS, make sure it's `2024.08-4` or later.
 - Make sure you've added `acpi=off` to QEMU's cmdline while using EDK II.
 - If you get stuck at EDK II and can't boot into the system, try manually selecting boot device inside EDK II menu, or choose EFI file from the boot partition.
