@@ -18,7 +18,7 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 - Debian testing netinst CD: https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
 - 系统默认已预装 `qemu-system-riscv64`
 - 需要手动安装 `wget` 或 `curl` 等下载工具以下载镜像
-- 软件源内提供了 `u-boot-qemu`，如有需要可手动安装
+- 软件源内提供了 `u-boot-qemu` 和 `qemu-efi-riscv64`，如有需要可手动安装
 
 > 若下载速度慢可以考虑更换其它镜像源。
 
@@ -29,7 +29,8 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 - 使用 `u-boot-qemu` 包提供的 `u-boot.elf`
     - Ubuntu 和 FreeBSD 可用此方法启动。
 - 使用其它固件
-    - 如 openEuler RISC-V 随系统镜像一同分发的 EDK II 固件，即可使用此方式。
+    - 如 openEuler RISC-V 随系统镜像一同分发的 EDK II 固件。
+    - `qemu-efi-riscv64` 包也提供 EDK II 固件。
 - 手动指定 `-initrd` `-kernel` `-append` 参数
     - Ubuntu 可用此方法启动。
     - 系统自带的 Busybox KVM Demo 也是基于此方式启动。
@@ -98,7 +99,13 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 ### 方法二：使用其它固件（如 EDK II）
 
-此处以 openEuler RISC-V 24.09 为例。
+目前已经验证了 openEuler RISC-V 24.09、Ubuntu、Debian 均可使用 EDK II 进行启动。
+
+其中，openEuler 随系统一起分发了一份 EDK II 固件；Ubuntu 和 Debian 可使用 `qemu-efi-riscv64` 提供的固件启动。
+
+> 目前的 EDK II 固件在提示 `Press ESCAPE within 5 seconds for boot options` 时可能需要等待较久时间（~50s）。按 Enter 可跳过。
+
+#### openEuler
 
 获取并解压系统镜像：
 
@@ -219,6 +226,21 @@ sudo qemu-system-riscv64 \
 
 如有需要，您也可以在启动后出现 `Press ESCAPE within 5 seconds for boot options` 提示时，按 ESC 打断 EDK II 的自动启动，进入 EDK II 菜单调整设置。
 
+#### Ubuntu
+
+```shell
+sudo apt update && sudo apt install -y qemu-efi-riscv64 wget
+wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
+xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
+cp /usr/share/qemu-efi-riscv64/RISCV_VIRT_*.fd .
+sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,acpi=off -cpu host -m 2048 -smp 2 -nographic \
+        -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
+        -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
+```
+
 ### 方法三：直接加载 vmlinuz 和 initrd
 
 RockOS 的系统镜像中，在 `/home/debian` 目录下自带了一个基于 `busybox` 的 KVM 示例，可供参考。
@@ -278,3 +300,11 @@ FreeBSD 14.1-RELEASE + U-Boot:
 Debian testing netinst CD + U-Boot:
 
 [![Debian testing netinst CD + U-Boot](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav.svg)](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav)
+
+## 其他说明
+
+- 确保系统版本为 RockOS 20241112 或更新。
+- 确保内核版本为 `6.6.60-win2030 #2024.11.12.15.41+f65fc3e21` 或更新。
+- 如使用 RockOS 提供的 `qemu-efi-riscv64` 包，确保版本为 `2024.08-4` 或更新。
+- 使用 EDK II 时，确保添加了 `acpi=off` 选项。
+- 若 EDK II 不能正常进入系统，可尝试在 EDK II 菜单内手动选择引导设备，或者在 EFI Shell 内手动启动 boot 分区的 EFI 文件。

@@ -18,7 +18,7 @@ Currently the following are verifed as working:
 - Debian testing netinst CD: https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
 - `qemu-system-riscv64` is installed by default
 - Manually install `wget` or `curl` to download the image
-- `u-boot-qemu` is provided in the repo, manually install it if needed
+- `u-boot-qemu` and `qemu-efi-riscv64` are provided in the repo, manually install them if needed
 
 > You can try other mirrors if the official server is too slow for you.
 
@@ -30,6 +30,7 @@ Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is
     - You can boot Ubuntu and FreeBSD with this method.
 - Use other firmwares
     - e.g. openEuler RISC-V + EDK II (distributed along side with system image)
+    - EDK II comes with `qemu-efi-riscv64` package
 - Use `-initrd` `-kernel` `-append` flags
     - You can boot Ubuntu with this method.
     - The BusyBox KVM Demo is also using this method.
@@ -98,7 +99,13 @@ After the installation process, power off the VM, delete `-boot d -cdrom debian-
 
 ### Method B: Use other firmwares (e.g. TianoCore EDK II)
 
-We're using openEuler RISC-V 24.09 as example here.
+Currently, openEuler, Ubuntu and Debian are verified.
+
+For openEuler use the EDK II firmware distributed with the main system image; for Ubuntu and Debian, install `qemu-efi-riscv64` and use the firmware provided by this package.
+
+> Current version of EDK II might get stuck at `Press ESCAPE within 5 seconds for boot options` (~50s). Press Enter to skip.
+
+#### openEuler
 
 Obtain and decompress the image:
 
@@ -219,6 +226,21 @@ Default password: `openEuler12#$`
 
 If needed, you can press ESC to interrupt EDK II autoboot while promting `Press ESCAPE within 5 seconds for boot options`, and enter EDK II menu to edit settings.
 
+#### Ubuntu
+
+```shell
+sudo apt update && sudo apt install -y qemu-efi-riscv64 wget
+wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
+xz -dkv -T0 ubuntu-24.10-preinstalled-server-riscv64.img.xz
+cp /usr/share/qemu-efi-riscv64/RISCV_VIRT_*.fd .
+sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,acpi=off -cpu host -m 2048 -smp 2 -nographic \
+        -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
+        -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
+```
+
 ### Method C: Directly load vmlinuz and initrd
 
 In RockOS system image, we have a `busybox` based KVM demo built in, at `/home/debian` for users to try out.
@@ -280,3 +302,11 @@ FreeBSD 14.1-RELEASE + U-Boot:
 Debian testing netinst CD + U-Boot:
 
 [![Debian testing netinst CD + U-Boot](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav.svg)](https://asciinema.org/a/JWEjdKH8oNbCATP2fDyKKbhav)
+
+## Notes
+
+- Make sure you're using RockOS 20241112 or later.
+- Make sure you're using Linux kernel `6.6.60-win2030 #2024.11.12.15.41+f65fc3e21` or later.
+- If you're using `qemu-efi-riscv64` provided by RockOS, make sure it's `2024.08-4` or later.
+- Make sure you've added `acpi=off` to QEMU's cmdline while using EDK II.
+- If you get stuck at EDK II and can't boot into the system, try manually selecting boot device inside EDK II menu, or choose EFI file from the boot partition.
