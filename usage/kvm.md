@@ -3,16 +3,20 @@
 RockOS supports KVM virtualization based on H Extension (RISC-V Hypervisor Extension).
 
 Currently the following are verifed as working:
-
+ 
 - Ubuntu 24.04.1 LTS & 24.10
 - openEuler 24.03 LTS & 24.09
 - FreeBSD 14.1-RELEASE
 - Debian testing netinst CD
 
+Boards currently verified as working:
+
+- Milk-V Megrez
+- SiFive HiFive Premier P550
+
 ## Environment
 
-- OS Version: RockOS [20241112](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/)
-        - Repo: RockOS [20241130](https://mirror.iscas.ac.cn/rockos/20241130/)
+- OS Version: RockOS [20241117](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241130/20241117/)
 - Ubuntu preinstalled image: https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -44,10 +48,9 @@ By default RockOS does not load KVM module on boot, so before we start, manually
 sudo modprobe kvm
 ```
 
-Also we need to change repo to `20241130` for latest packages:
+Install required packages:
 
 ```shell
-sudo sed -i 's/20241030/20241130/g' /etc/apt/sources.list.d/0000sources.list
 sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 ```
 

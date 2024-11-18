@@ -9,10 +9,14 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 - FreeBSD 14.1-RELEASE
 - Debian testing netinst CD
 
+已验证支持的硬件：
+
+- Milk-V Megrez
+- SiFive HiFive Premier P550
+
 ## 演示环境
 
-- 系统版本：RockOS [20241112](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241112/)
-        - 软件源：RockOS [20241130](https://mirror.iscas.ac.cn/rockos/20241130/)
+- 系统版本：RockOS [20241117](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241130/20241117/)
 - Ubuntu 预安装镜像：https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -44,10 +48,9 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 sudo modprobe kvm
 ```
 
-此外，需要将软件源更新至 `20241130`，以获取最新的软件包：
+获取所需软件包：
 
 ```shell
-sudo sed -i 's/20241030/20241130/g' /etc/apt/sources.list.d/0000sources.list
 sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 ```
 
