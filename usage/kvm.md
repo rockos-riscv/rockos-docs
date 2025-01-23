@@ -21,6 +21,7 @@ Boards currently verified as working:
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
 - Debian testing netinst CD: https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
+- Debian sid cloud image: https://cdimage.debian.org/images/cloud/sid/daily/latest/debian-sid-nocloud-riscv64-daily.qcow2
 - `qemu-system-riscv64` is installed by default
 - Manually install `wget` or `curl` to download the image
 - `u-boot-qemu` and `qemu-efi-riscv64` are provided in the repo, manually install them if needed
@@ -42,7 +43,7 @@ Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is
     - You can also boot FreeBSD this way according to [FreeBSD Wiki](https://wiki.freebsd.org/riscv/QEMU#Boot_FreeBSD).
         - Not tested & not demonstrated in this article.
 
-By default RockOS does not load KVM module on boot, so before we start, manually load it:
+By default RockOS **does not load KVM module on boot**, so before we start, manually load it:
 
 ```shell
 sudo modprobe kvm
@@ -87,6 +88,19 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 ```
 
 Use username `root` for a passwordless login.
+
+#### Debian cloud
+
+Debian sid currently provides qcow2 disk images.
+
+```shell
+wget https://cdimage.debian.org/images/cloud/sid/daily/latest/debian-sid-nocloud-riscv64-daily.qcow2
+sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographic \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
+        -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
+```
 
 #### Debian testing netinst CD
 
@@ -245,6 +259,19 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
         -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
         -device virtio-rng-pci \
         -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
+```
+
+#### Debian cloud
+
+```shell
+wget https://cdimage.debian.org/images/cloud/sid/daily/latest/debian-sid-nocloud-riscv64-daily.qcow2
+cp /usr/share/qemu-efi-riscv64/RISCV_VIRT_*.fd .
+sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,acpi=off -cpu host -m 2048 -smp 2 -nographic \
+        -blockdev node-name=pflash0,driver=file,read-only=on,filename=RISCV_VIRT_CODE.fd \
+        -blockdev node-name=pflash1,driver=file,filename=RISCV_VIRT_VARS.fd \
+        -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
+        -device virtio-rng-pci \
+        -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
 ```
 
 ### Method C: Directly load vmlinuz and initrd
