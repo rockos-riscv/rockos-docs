@@ -1,4 +1,4 @@
-# RockOS KVM 示例
+# KVM 示例
 
 RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化。
 

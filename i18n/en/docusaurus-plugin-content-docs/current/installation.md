@@ -1,4 +1,4 @@
-# RockOS Image Flashing Guide
+# Image Flashing Guide
 
 ## Environment
 
