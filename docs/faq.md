@@ -2,7 +2,9 @@
 
 此处列出一些您在使用 RockOS 时可能遇到的问题与对应的解决方案。
 
-## 我的 AMD RDNA（或更新）显卡不工作，开机时会出现 Kernel Oops
+## 独立显卡相关
+
+### 我的 AMD RDNA（或更新）显卡不工作，开机时会出现 Kernel Oops
 
 此问题与 AMD 显卡的 PCI-E D3cold 相关。
 
@@ -13,6 +15,36 @@
 您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
 
 编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`，重启系统。
+
+### 我安装了一张独立显卡，但是开机时死机
+
+很可能您遇到了供电不足。请使用 ATX 而非 DC 电源。
+
+根据 PCI-E 规范，PCI-E 插槽供电需要 75W 供电能力，如果使用 12V 5A 的 60W DC 供电则可能会供电不足，进而无法正常开机。
+
+### 独立显卡无显示输出
+
+这是由于系统默认使用了 Imagination GPU 以及板载的 HDMI 接口输出。
+
+我们需要修改配置，禁用核心显卡和显示输出，并切换 `Mesa` 版本。
+
+与上述 D3cold 问题的方法类似，我们可以编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
+
+`initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm`
+
+您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
+
+编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`。
+
+除此之外，默认的 `Mesa` 版本是专为 Imagination GPU 适配的，使用 AMD GPU 需要切换版本：
+
+```shell
+dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
+sudo apt-mark hold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
+mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+```
+
+重启开发板，独立显卡此时应当能够正确输出画面了。
 
 ## 我需要 Imagination GPU 上的 OpenGL 支持
 

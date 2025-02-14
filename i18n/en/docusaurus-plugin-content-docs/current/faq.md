@@ -2,7 +2,9 @@
 
 Some common Q&As for RockOS.
 
-## My AMD RDNA (or newer) GPU isn't working, with Kernel Oops on boot
+## dGPU related
+
+### My AMD RDNA (or newer) GPU isn't working, with Kernel Oops on boot
 
 This is related to AMD GPUs' PCI-E D3cold.
 
@@ -13,6 +15,36 @@ To solve this, edit `/etc/default/u-boot`, add the following parameters in `U_BO
 You can use `nano` to edit: `sudo nano /etc/default/u-boot`
 
 After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update` and reboot the system.
+
+### I installed a dGPU but the system freezes on boot
+
+It's very likely you have insufficient power supply. Please use ATX PSU rather than DC PSU.
+
+According to PCI-E specifications, PCI-E slot requires 75W of power, while using a 12V 5A 60W DC PSU might not be enough, thus causing a boot failure.
+
+### No video output on dGPU
+
+This is because the system is configured to use the Imagination GPU and onboard HDMI output by default.
+
+We need to change the configurations, disable the iGPU and display output, and switch `Mesa` version.
+
+Like the D3cold workaround above, we can edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
+
+`initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm`
+
+You can use `nano` to edit: `sudo nano /etc/default/u-boot`
+
+After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update`.
+
+The default installed `Mesa` is specifically for Imagination GPU rather than AMD GPUs, so we'll need to switch versions here:
+
+```shell
+dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
+sudo apt-mark hold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
+mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+```
+
+Now you can reboot the board, video output should be on the dGPU now.
 
 ## I need OpenGL on the integrated Imagination GPU
 
