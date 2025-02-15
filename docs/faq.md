@@ -14,7 +14,14 @@
 
 您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
 
-编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`，重启系统。
+编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`。
+
+如果此时已经安装了显卡，可能会出现无法重启的情况，可以使用 `SysRq` 的方式强制重启：
+
+```shell
+sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
+sudo sh -c 'echo b > /proc/sysrq-trigger'
+```
 
 ### 我安装了一张独立显卡，但是开机时死机
 
@@ -42,9 +49,10 @@
 dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
 sudo apt-mark hold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
 mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
 ```
 
-重启开发板，独立显卡此时应当能够正确输出画面了。
+重启开发板。独立显卡此时应当能够正确输出画面了。
 
 ## 我需要 Imagination GPU 上的 OpenGL 支持
 

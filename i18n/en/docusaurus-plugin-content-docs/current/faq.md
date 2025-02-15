@@ -14,11 +14,18 @@ To solve this, edit `/etc/default/u-boot`, add the following parameters in `U_BO
 
 You can use `nano` to edit: `sudo nano /etc/default/u-boot`
 
-After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update` and reboot the system.
+After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update`.
+
+If you already installed the dGPU, you might not be able to perform a system reboot. You can use `SysRq` to do a force reboot:
+
+```shell
+sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
+sudo sh -c 'echo b > /proc/sysrq-trigger'
+```
 
 ### I installed a dGPU but the system freezes on boot
 
-It's very likely you have insufficient power supply. Please use ATX PSU rather than DC PSU.
+It's very likely that you have insufficient power supply. Please use ATX PSU rather than DC PSU.
 
 According to PCI-E specifications, PCI-E slot requires 75W of power, while using a 12V 5A 60W DC PSU might not be enough, thus causing a boot failure.
 
@@ -42,9 +49,10 @@ The default installed `Mesa` is specifically for Imagination GPU rather than AMD
 dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
 sudo apt-mark hold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
 mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
 ```
 
-Now you can reboot the board, video output should be on the dGPU now.
+Now you can reboot the board. Video output should be on the dGPU now.
 
 ## I need OpenGL on the integrated Imagination GPU
 
