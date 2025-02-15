@@ -2,7 +2,7 @@
 
 RockOS supports KVM virtualization based on H Extension (RISC-V Hypervisor Extension).
 
-Currently the following are verifed as working:
+Currently the following are verified as working:
  
 - Ubuntu 24.04.1 LTS & 24.10
 - openEuler 24.03 LTS & 24.09
@@ -34,7 +34,7 @@ Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is
 
 - Use `u-boot.elf` provided by `u-boot-qemu` package
     - You can boot Ubuntu and FreeBSD with this method.
-- Use other firmwares
+- Use other firmware
     - e.g. openEuler RISC-V + EDK II (distributed along side with system image)
     - EDK II comes with `qemu-efi-riscv64` package
 - Use `-initrd` `-kernel` `-append` flags
@@ -119,7 +119,7 @@ Execute the commands above will create a 16G qcow2 disk image, and bring you to 
 
 After the installation process, power off the VM, delete `-boot d -cdrom debian-testing-riscv64-netinst.iso \`, and then you can boot straight into the installed system.
 
-### Method B: Use other firmwares (e.g. TianoCore EDK II)
+### Method B: Use other firmware (e.g. TianoCore EDK II)
 
 Currently, openEuler, Ubuntu and Debian are verified.
 

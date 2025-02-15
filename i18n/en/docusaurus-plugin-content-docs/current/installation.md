@@ -1,5 +1,11 @@
 # Image Flashing Guide
 
+:::note
+Some parts of this guide is for SiFive HiFive Premier P550 only. See notes below.
+
+We'll update the docs soon.
+:::
+
 ## Environment
 
 Host System Version: Ubuntu 22.04
@@ -18,9 +24,17 @@ Host System Version: Ubuntu 22.04
 
 ### Image Downloads
 
-- Bootloader: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/bootloader_secboot_ddr5_hifive-p550.bin)
-- Bootfs: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/boot-eswin_evb-20241024-145708.ext4.zst)
-- Rootfs: [Download here](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/root-eswin_evb-20241024-145708.ext4.zst)
+For bootloader, boot and root images, download from [here](https://mirror.iscas.ac.cn/rockos/images/generic/latest/).
+
+- BootFS: `boot-rockos-*.ext4.zst`
+- RootFS: `root-rockos-*.ext4.zst`
+- For SD Card and SSD: `sdcard-rockos-*.img.zst`
+- Bootloader for different boards:
+    - ESWIN EIC7700 EVB A2: `bootloader_secboot_ddr5_eic7700-evb-a2.bin`
+    - ESWIN EIC7700 EVB A3: `bootloader_secboot_ddr5_eic7700-evb-a3.bin`
+    - SiFive HiFive Premier P550: `bootloader_secboot_ddr5_hifive-p550.bin`
+    - Milk-V Megrez: `bootloader_secboot_ddr5_milkv-megrez.bin`
+    - PINE64 StarPro64: `bootloader_secboot_ddr5_pine64-starpro64.bin`
 
 After downloading, please extract the boot and rootfs files. Copy the bootloader file to the USB drive formatted in FAT32.
 
@@ -38,6 +52,10 @@ According to Section 3.1.6 of the [official user manual](https://sifive.cdn.pris
 First, establish a serial connection to the board. Once the cables are correctly connected, the board will be listed as four UARTs.
 
 <!-- ![tty](./image%20for%20flash/tty.png) -->
+
+:::tip
+This chart below is for SiFive HiFive Premier P550 only, while other boards might have different.
+:::
 
 Following Section 2.1.1.1 of the [MCU User Manual](https://www.sifive.cn/api/document-file?uid=premier-p550-mcu-user-manual), set the ttyUSB2 as the connection path in minicom, and set the baud rate to 115200.
 
@@ -57,7 +75,7 @@ Insert the prepared USB drive containing the bootloader file.
 
 After pressing the power button to boot, observe the minicom window and interrupt the U-Boot booting by pressing Ctrl+C or enter.
 
-<!-- ![intetrupt](./image%20for%20flash/Interrupt.png) -->
+<!-- ![interrupt](./image%20for%20flash/Interrupt.png) -->
 
 Execute the following commands to check the files on the USB drive:
 

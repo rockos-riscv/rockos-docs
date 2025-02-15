@@ -1,5 +1,11 @@
 # 镜像刷写教程
 
+:::note
+本教程的部分内容仅针对 SiFive HiFive Premier P550。
+
+我们将很快更新此文档。
+:::
+
 ## 演示环境
 
 主机系统版本:Ubuntu22.04
@@ -18,9 +24,17 @@
 
 ### 镜像下载
 
-- bootloader: [点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/bootloader_secboot_ddr5_hifive-p550.bin)
-- bootfs: [点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/boot-eswin_evb-20241024-145708.ext4.zst)
-- rootfs: [点击下载](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241030/20241024/root-eswin_evb-20241024-145708.ext4.zst)
+请从 [此处](https://mirror.iscas.ac.cn/rockos/images/generic/latest/) 下载 bootloader, boot 和 root 镜像。
+
+- BootFS: `boot-rockos-*.ext4.zst`
+- RootFS: `root-rockos-*.ext4.zst`
+- SD 卡和 SSD：`sdcard-rockos-*.img.zst`
+- 不同开发板的 Bootloader 选择：
+    - ESWIN EIC7700 EVB A2: `bootloader_secboot_ddr5_eic7700-evb-a2.bin`
+    - ESWIN EIC7700 EVB A3: `bootloader_secboot_ddr5_eic7700-evb-a3.bin`
+    - SiFive HiFive Premier P550: `bootloader_secboot_ddr5_hifive-p550.bin`
+    - Milk-V Megrez: `bootloader_secboot_ddr5_milkv-megrez.bin`
+    - PINE64 StarPro64: `bootloader_secboot_ddr5_pine64-starpro64.bin`
 
 bootfs 及 rootfs 请下载后进行解压，bootloader 文件下载完成后请拷贝到已经格式化为 FAT32 的 U 盘中。
 
@@ -41,6 +55,10 @@ USB Type A 转 USB Type C 接入编号 15 `Type-C USB` 连接器。
 <!-- ![tty](./image%20for%20flash/tty.png) -->
 
 根据[MCU 用户手册](https://www.sifive.cn/api/document-file?uid=premier-p550-mcu-user-manual)中 2.1.1.1 节的内容，我们在 minicom 中将 ttyUSB2 设置为连接路径，波特率设置为 115200。
+
+:::tip
+下表仅针对 SiFive HiFive Premier P550 开发板，其它开发板可能不同。
+:::
 
 <!-- ![uart](./image%20for%20flash/uart.png) -->
 | 序号 | 设备 |
