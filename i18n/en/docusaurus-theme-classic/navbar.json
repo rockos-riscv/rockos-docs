@@ -1,0 +1,14 @@
+{
+  "item.label.安装教程": {
+    "message": "Tutorial"
+  },
+  "item.label.博客": {
+    "message": "Blog"
+  },
+  "item.label.项目列表": {
+    "message": "Project List"
+  },
+  "item.label.镜像列表": {
+    "message": "Image List"
+  }
+}
