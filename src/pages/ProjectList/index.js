@@ -38,8 +38,8 @@ const ProjectList = () => {
                 color: "white",
                 fontSize: "1.5rem",
               }}>
-                {translate({ id: "RockOs 项目列表", message: "RockOs 项目列表" })}
-                <span style={{ color: "#d1d1d1", fontSize: "0.8rem", fontWeight: "50", display: "block" }}>{translate({ id: "RockOs 下的所有项目仓库", message: "RockOs 下的所有项目仓库" })}</span>
+                {translate({ id: "rockos 项目列表", message: "rockos 项目列表" })}
+                <span style={{ color: "#d1d1d1", fontSize: "0.8rem", fontWeight: "50", display: "block" }}>{translate({ id: "rockos 下的所有项目仓库", message: "rockos 下的所有项目仓库" })}</span>
               </p>
             </div>
           }

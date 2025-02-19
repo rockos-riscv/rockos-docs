@@ -143,7 +143,7 @@ const ImageList = () => {
                 fontSize: "1.5rem"
               }}>
                 {translate({ id: "镜像列表", message: "镜像列表" })}
-                <span style={{ color: "#d1d1d1", fontSize: "0.8rem", fontWeight: "50", display: "block" }}>{translate({ id: "RockOs 下的所有镜像", message: "RockOs 下的所有镜像" })}</span>
+                <span style={{ color: "#d1d1d1", fontSize: "0.8rem", fontWeight: "50", display: "block" }}>{translate({ id: "rockos 下的所有镜像", message: "rockos 下的所有镜像" })}</span>
               </p>
             </div>
           }
@@ -151,16 +151,6 @@ const ImageList = () => {
             style={{ backgroundColor: "#2a6f97", marginTop: "1rem", width: "60%", border: "none" }}
           >
           </Card>
-        </div>
-        <div style={{ display: 'flex', alignContent: "flex-start", width: "50%", marginTop: "1rem" }}>
-          <Checkbox checked={selectReplaceBy}
-            onChange={() => {
-              setSelectReplaceBy(!selectReplaceBy)
-            }}>{translate({ id: "显示过时镜像", message: "显示过时镜像" })}</Checkbox>
-          <Checkbox checked={selectModified}
-            onChange={() => {
-              setSelectModified(!selectModified)
-            }}>{translate({ id: "显示定制镜像", message: "显示定制镜像" })}</Checkbox>
         </div>
         {collapseData && <Collapse items={collapseData} style={{ width: "50%", marginTop: "1rem", backgroundColor: "white", marginBottom: "1rem" }}></Collapse>}
       </div>

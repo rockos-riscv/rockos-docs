@@ -1,56 +1,32 @@
 [
   {
-    "title": "deepin RISC-V 内核构建仓库",
-    "repo": "deepin-riscv-kernel",
-    "description": "存放 deepin RISC-V 内核/U-Boot 构建脚本、patch、配置和 GitHub 工作流",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
+    "title": "rockos 内核仓库",
+    "repo": "rockos-kernel",
+    "description": "rockos linux kernel",
+    "link": "https://github.com/rockos-riscv/rockos-kernel"
   },
   {
-    "title": "deepin 主线内核（滚动）",
-    "repo": "kernel-rolling",
-    "description": "全架构共享的 deepin 内核源码仓库",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
+    "title": "rockos u-boot 仓库",
+    "repo": "rockos-u-boot",
+    "description": "rockos u-boot repo",
+    "link": "https://github.com/rockos-riscv/rockos-u-boot"
   },
   {
-    "title": "deepin 主线内核（LTS）",
-    "repo": "kernel",
-    "description": "全架构共享的 deepin 内核源码仓库",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
+    "title": "rockos opensbi 仓库",
+    "repo": "rockos-opensbi",
+    "description": "rockos opensbi repo",
+    "link": "https://github.com/rockos-riscv/rockos-opensbi"
   },
   {
-    "title": "deepin-ports 镜像构建脚本",
-    "repo": "YukariChiba/deepin-ports-image",
-    "description": "构建 deepin-ports，尤其是 RISC-V 架构镜像的脚本",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
+    "title": "gst-plugins-es 仓库",
+    "repo": "gst-plugins-es",
+    "description": "eic770x gst plugin repo",
+    "link": "https://github.com/rockos-riscv/gst-plugins-es"
   },
   {
-    "title": "deepin-ports 设备配置仓库",
-    "repo": "deepin-ports-profiles",
-    "description": "deepin-ports 的设备支持包，带有设备的部分配置文件和软件包依赖",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
-  },
-  {
-    "title": "deepin-ports SIG (本站)",
-    "repo": "sig-deepin-ports",
-    "description": "前端代码和文档内容",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
-  },
-  {
-    "title": "RISC-V IMG GPU mesa",
-    "repo": "mesa",
-    "description": "部分设备的 Imagination GPU mesa 驱动（在 ports/pvr-ddk* 分支）",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
-  },
-  {
-    "title": "RISC-V IMG GPU 固件",
-    "repo": "img-gpu-bin",
-    "description": "部分设备的 Imagination GPU 固件和闭源驱动",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
-  },
-  {
-    "title": "RISC-V ffmpeg",
-    "repo": "ffmpeg",
-    "description": "部分设备的 ffmpeg 适配版本（在 ports/ffmpeg-* 分支）",
-    "link": "https://github.com/rockos-riscv/rockos-docs"
+    "title": "rockos ffmpeg 仓库",
+    "repo": "rockos-ffmpeg",
+    "description": "eic770x ffmpeg repo",
+    "link": "https://github.com/rockos-riscv/rockos-ffmpeg"
   }
 ]
