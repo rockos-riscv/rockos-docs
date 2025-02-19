@@ -1,13 +1,12 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
   title: 'RockOS',
   tagline: 'RockOS 是 PLCT 实验室支持开发的面向 EIC770X 系列芯片生态的 Debian 优化发行版',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/plct-logo.png',
 
   // Set the production url of your site here
   url: 'https://rockos-riscv.github.io',
@@ -28,7 +27,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'zh-Hans',
-    locales: [ 'zh-Hans', 'en'],
+    locales: ['zh-Hans', 'en'],
   },
 
   presets: [
@@ -70,17 +69,19 @@ const config: Config = {
     navbar: {
       title: 'RockOS',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'PLCT Logo',
+        src: 'img/plct-logo.png',
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: '安装教程',
         },
-        // {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: '博客', position: 'left' },
+        { to: '/ProjectList', label: '项目列表', position: 'left' },
+        { to: '/ImageList', label: '镜像列表', position: 'left' },
         {
           href: 'https://github.com/rockos-riscv',
           label: 'GitHub',
@@ -109,23 +110,6 @@ const config: Config = {
           ],
         },
         {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
-            },
-          ],
-        },
-        {
           title: 'More',
           items: [
             {
@@ -146,8 +130,8 @@ const config: Config = {
       copyright: `Copyright © 2024-${new Date().getFullYear()} PLCT Lab. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.vsLight,
+      darkTheme: prismThemes.vsDark,
     },
   } satisfies Preset.ThemeConfig,
 };

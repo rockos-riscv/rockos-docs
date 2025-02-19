@@ -1,0 +1,122 @@
+{
+  "RockOs 项目列表": {
+    "message": "RockOs Project List"
+  },
+  "RockOs 下的所有项目仓库": {
+    "message": "All project repositories under RockOs"
+  },
+  "deepin RISC-V 内核构建仓库": {
+    "message": "Deepin RISC-V Kernel Build Repository"
+  },
+  "存放 deepin RISC-V 内核/U-Boot 构建脚本、patch、配置和 GitHub 工作流": {
+    "message": "Storing Deepin RISC-V kernel/U-Boot build scripts, patches, configurations, and GitHub workflows"
+  },
+  "deepin 主线内核（滚动）": {
+    "message": "Deepin Mainline Kernel (Rolling)"
+  },
+  "全架构共享的 deepin 内核源码仓库": {
+    "message": "Deepin kernel source repository shared across all architectures"
+  },
+  "deepin 主线内核（LTS）": {
+    "message": "Deepin Mainline Kernel (LTS)"
+  },
+  "deepin-ports 镜像构建脚本": {
+    "message": "Deepin-Ports Image Build Scripts"
+  },
+  "构建 deepin-ports，尤其是 RISC-V 架构镜像的脚本": {
+    "message": "Scripts for building deepin-ports images, especially for the RISC-V architecture"
+  },
+  "deepin-ports 设备配置仓库": {
+    "message": "Deepin-Ports Device Configuration Repository"
+  },
+  "deepin-ports 的设备支持包，带有设备的部分配置文件和软件包依赖": {
+    "message": "Device support package for deepin-ports, including partial device configuration files and package dependencies"
+  },
+  "deepin-ports SIG (本站)": {
+    "message": "Deepin-Ports SIG (This Site)"
+  },
+  "前端代码和文档内容": {
+    "message": "Frontend code and documentation content"
+  },
+  "RISC-V IMG GPU mesa": {
+    "message": "RISC-V IMG GPU Mesa"
+  },
+  "部分设备的 Imagination GPU mesa 驱动（在 ports/pvr-ddk* 分支）": {
+    "message": "Imagination GPU mesa driver for some devices (available in ports/pvr-ddk* branches)"
+  },
+  "RISC-V IMG GPU 固件": {
+    "message": "RISC-V IMG GPU Firmware"
+  },
+  "部分设备的 Imagination GPU 固件和闭源驱动": {
+    "message": "Imagination GPU firmware and proprietary drivers for some devices"
+  },
+  "RISC-V ffmpeg": {
+    "message": "RISC-V FFmpeg"
+  },
+  "部分设备的 ffmpeg 适配版本（在 ports/ffmpeg-* 分支）": {
+    "message": "Adapted version of FFmpeg for some devices (available in ports/ffmpeg-* branches)"
+  },
+  "镜像版本": {
+    "message": "Image Version"
+  },
+  "镜像大小": {
+    "message": "Image Size"
+  },
+  "发布日期": {
+    "message": "Release Date"
+  },
+  "链接": {
+    "message": "Link"
+  },
+  "下载": {
+    "message": "Download"
+  },
+  "定制": {
+    "message": "Customized"
+  },
+  "过时": {
+    "message": "Deprecated"
+  },
+  "镜像列表": {
+    "message": "Image List"
+  },
+  "RockOs 下的所有镜像": {
+    "message": "All Images under RockOs"
+  },
+  "显示过时镜像": {
+    "message": "Show Deprecated Images"
+  },
+  "显示定制镜像": {
+    "message": "Show Customized Images"
+  },
+  "通用设备 / QEMU": {
+    "message": "Generic Device / QEMU"
+  },
+  "项目列表": {
+    "message": "Project List"
+  },
+  "探索 RockOS 相关项目，获取最新的开发进展和开源资源。轻松安装、配置和管理您的环境，快速搭建稳定的系统。": {
+    "message": "Explore RockOS-related projects, access the latest development progress and open-source resources. Easily install, configure, and manage your environment for a stable system setup."
+  },
+  "镜像发布": {
+    "message": "Image Releases"
+  },
+  "提供 RockOS 预构建镜像，助您快速部署。支持多种架构，轻松下载并安装，无需繁琐配置，让您的系统即刻启动。": {
+    "message": "Providing RockOS pre-built images to help you deploy quickly. Supporting multiple architectures, allowing easy download and installation with minimal configuration for instant system startup."
+  },
+  "博客": {
+    "message": "Blog"
+  },
+  "阅读最新的技术文章、更新日志和开发者分享。了解 RockOS 生态的发展动态，获取深入的技术见解，助力高效开发。": {
+    "message": "Read the latest technical articles, release notes, and developer insights. Stay updated on the RockOS ecosystem, gain in-depth technical knowledge, and enhance development efficiency."
+  },
+  "RockOS": {
+    "message": "RockOS"
+  },
+  "RockOS 是 PLCT 实验室支持开发的面向 EIC770X 系列芯片生态的 Debian 优化发行版": {
+    "message": "RockOS is a Debian-optimized distribution supported by the PLCT Lab, designed for the EIC770X series chip ecosystem."
+  },
+  "安装教程": {
+    "message": "Installation Guide"
+  }
+}
