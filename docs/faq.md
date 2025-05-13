@@ -75,6 +75,7 @@ sudo u-boot-update
 sudo apt-mark unhold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
 mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
 sudo apt update; sudo apt upgrade -y
+sudo apt upgrade -y libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0
 # 移除 GLX 扩展
 sudo rm -vrf /usr/lib/xorg/modules/extensions
 # 恢复 GPU 软件包及其配置
@@ -141,3 +142,15 @@ Swap:             0B          0B          0B
 ```
 
 如需恢复，将 `bootcmd` 还原回 `bootflow scan -lb`，然后 `env save` 即可。
+
+## 运行 apt update 时，提示 GPG 签名过期
+
+此问题在 20250330_20250423 release 后已经修复，请及时更新您的系统。
+
+如果是在更老版本的系统，可通过手动安装新 `rockos-keyring` 包的方法更新 keyring：
+
+```shell
+wget https://fast-mirror.isrc.ac.cn/rockos/20250330/rockos-addons/pool/main/r/rockos-keyring/rockos-keyring_2025.03.28_all.deb
+sudo dpkg -i rockos-keyring_2025.03.28_all.deb
+rm rockos-keyring_2025.03.28_all.deb
+```

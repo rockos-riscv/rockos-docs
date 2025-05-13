@@ -71,10 +71,14 @@ It's basically doing the opposite.
 # Remove PCI-E and blacklist parameters you previously added
 sudo nano /etc/default/u-boot
 sudo u-boot-update
+# Switch Mesa version
 sudo apt-mark unhold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
 mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
 sudo apt update; sudo apt upgrade -y
+sudo apt upgrade -y libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0
+# Remove GLX Extension
 sudo rm -vrf /usr/lib/xorg/modules/extensions
+# Restore GPU package and it's configuration
 sudo apt install -y eswin-eic7x-gpu
 ```
 
@@ -138,3 +142,15 @@ Swap:             0B          0B          0B
 ```
 
 To revert, set `bootcmd` back to `bootflow scan -lb`, then `env save`.
+
+## GPG key expired when running apt update
+
+This has been fixed after the 20250330_20250423 release, please upgrade your system.
+
+If you're on an older version, you can manually install the `rockos-keyring` package to update the keyring:
+
+```shell
+wget https://fast-mirror.isrc.ac.cn/rockos/20250330/rockos-addons/pool/main/r/rockos-keyring/rockos-keyring_2025.03.28_all.deb
+sudo dpkg -i rockos-keyring_2025.03.28_all.deb
+rm rockos-keyring_2025.03.28_all.deb
+```
