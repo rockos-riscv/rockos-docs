@@ -19,6 +19,7 @@
 如果此时已经安装了显卡，可能会出现无法重启的情况，可以使用 `SysRq` 的方式强制重启：
 
 ```shell
+sync
 sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
 sudo sh -c 'echo b > /proc/sysrq-trigger'
 ```
@@ -43,7 +44,7 @@ sudo sh -c 'echo b > /proc/sysrq-trigger'
 
 编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`。
 
-除此之外，默认的 `Mesa` 版本是专为 Imagination GPU 适配的，使用 AMD GPU 需要切换版本：
+除此之外，默认的 `Mesa` 版本是专为 Imagination GPU 适配的，使用 AMD GPU 需要切换 Mesa 版本并开启 GLX 扩展：
 
 ```shell
 dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
@@ -52,7 +53,33 @@ mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
 sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
 ```
 
+此外，`/etc/vulkan/icd.d` 默认配置成使用 IMG 显卡，需要先移除相关配置。
+
+其中 `/etc/vulkan/icd.d/powervr_icd.json` 这一配置文件随 `eswin-eic7x-gpu` 包附带，你可以 *purge* 此软件包来移除配置文件：
+
+```shell
+sudo apt purge -y eswin-eic7x-gpu
+```
+
 重启开发板。独立显卡此时应当能够正确输出画面了。
+
+#### 恢复使用 IMG GPU
+
+恢复先前修改即可。
+
+```shell
+# 移除先前添加的 PCI-E 和 blacklist 参数
+sudo nano /etc/default/u-boot
+sudo u-boot-update
+# 切换 Mesa 版本
+sudo apt-mark unhold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
+mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+sudo apt update; sudo apt upgrade -y
+# 移除 GLX 扩展
+sudo rm -vrf /usr/lib/xorg/modules/extensions
+# 恢复 GPU 软件包及其配置
+sudo apt install -y eswin-eic7x-gpu
+```
 
 ## 我需要 Imagination GPU 上的 OpenGL 支持
 

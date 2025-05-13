@@ -19,6 +19,7 @@ After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-b
 If you already installed the dGPU, you might not be able to perform a system reboot. You can use `SysRq` to do a force reboot:
 
 ```shell
+sync
 sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
 sudo sh -c 'echo b > /proc/sysrq-trigger'
 ```
@@ -43,7 +44,7 @@ You can use `nano` to edit: `sudo nano /etc/default/u-boot`
 
 After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update`.
 
-The default installed `Mesa` is specifically for Imagination GPU rather than AMD GPUs, so we'll need to switch versions here:
+The default installed `Mesa` is specifically for Imagination GPU rather than AMD GPUs, so we'll need to switch versions, and enable the GLX extension here:
 
 ```shell
 dpkg -l | grep 22.3.5+1rockos1+0pvr2 | awk '{print $2"=24.2.3-1"}' | xargs sudo apt install --allow-downgrades -y
@@ -52,7 +53,30 @@ mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
 sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
 ```
 
+Also by default, `/etc/vulkan/icd.d` is configured to use the IMG iGPU, you'll need to remove related configurations.
+
+`/etc/vulkan/icd.d/powervr_icd.json` comes with the `eswin-eic7x-gpu` package, you can *purge* it to remove the configuration:
+
+```shell
+sudo apt purge -y eswin-eic7x-gpu
+```
+
 Now you can reboot the board. Video output should be on the dGPU now.
+
+#### Revert changes to use the IMG GPU
+
+It's basically doing the opposite.
+
+```shell
+# Remove PCI-E and blacklist parameters you previously added
+sudo nano /etc/default/u-boot
+sudo u-boot-update
+sudo apt-mark unhold libegl-mesa0 libgbm1 libgl1-mesa-dri libglapi-mesa libglx-mesa0 \
+mesa-va-drivers mesa-vdpau-drivers mesa-vulkan-drivers mesa-libgallium
+sudo apt update; sudo apt upgrade -y
+sudo rm -vrf /usr/lib/xorg/modules/extensions
+sudo apt install -y eswin-eic7x-gpu
+```
 
 ## I need OpenGL on the integrated Imagination GPU
 
