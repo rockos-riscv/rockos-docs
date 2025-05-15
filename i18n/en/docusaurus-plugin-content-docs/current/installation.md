@@ -146,9 +146,11 @@ fastboot flash root root-rockos-20250423-145338.ext4
 
 5. You're good to go.
 
-> [!NOTE]
-> Although U-Boot also supports `fastboot udp` to flash via network, but this would be much slower.
-> Flashing via network is generally not recommended, unless you're doing it remotely and cannot flip the switch.
+:::note
+Although U-Boot also supports `fastboot udp` to flash via network, but this would be much slower.
+
+Flashing via network is generally not recommended, unless you're doing it remotely and cannot flip the switch.
+:::
 
 #### Flash to SSD or microSD
 
