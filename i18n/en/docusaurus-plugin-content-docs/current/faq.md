@@ -10,7 +10,7 @@ This is related to AMD GPUs' PCI-E D3cold.
 
 To solve this, edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
 
-`pcie_port_pm=off pcie_aspm.policy=performance`
+`pcie_port_pm=off`
 
 You can use `nano` to edit: `sudo nano /etc/default/u-boot`
 
@@ -153,4 +153,18 @@ If you're on an older version, you can manually install the `rockos-keyring` pac
 wget https://fast-mirror.isrc.ac.cn/rockos/20250330/rockos-addons/pool/main/r/rockos-keyring/rockos-keyring_2025.03.28_all.deb
 sudo dpkg -i rockos-keyring_2025.03.28_all.deb
 rm rockos-keyring_2025.03.28_all.deb
+```
+
+## Garbled / distorted audio
+
+> This fix will be integrated in the next RockOS release.
+
+Please run the following commands:
+
+```shell
+sudo sh -c 'cat << EOF >> /etc/pulse/daemon.conf
+default-fragments = 4
+default-fragment-size-msec = 10
+EOF'
+systemctl restart --user pulseaudio.service
 ```

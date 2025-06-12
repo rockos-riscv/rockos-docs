@@ -10,7 +10,7 @@
 
 解决方案：编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
 
-`pcie_port_pm=off pcie_aspm.policy=performance`
+`pcie_port_pm=off`
 
 您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
 
@@ -153,4 +153,18 @@ Swap:             0B          0B          0B
 wget https://fast-mirror.isrc.ac.cn/rockos/20250330/rockos-addons/pool/main/r/rockos-keyring/rockos-keyring_2025.03.28_all.deb
 sudo dpkg -i rockos-keyring_2025.03.28_all.deb
 rm rockos-keyring_2025.03.28_all.deb
+```
+
+## 音频异常 / 破音
+
+> 下一版本的 RockOS 将集成此修复。
+
+请执行如下命令：
+
+```shell
+sudo sh -c 'cat << EOF >> /etc/pulse/daemon.conf
+default-fragments = 4
+default-fragment-size-msec = 10
+EOF'
+systemctl restart --user pulseaudio.service
 ```
