@@ -86,7 +86,7 @@ sudo apt install -y eswin-eic7x-gpu
 
 You can use `Zink` for `OpenGL`.
 
-Run the following commands to enable `Zink` globally:
+Run the following commands to enable `Zink` **globally**:
 
 ```shell
 sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
@@ -142,6 +142,25 @@ Swap:             0B          0B          0B
 ```
 
 To revert, set `bootcmd` back to `bootflow scan -lb`, then `env save`.
+
+### Increase the size of `mmz` reserved memory
+
+In some cases you may want to increase the size of `mmz`, e.g. running LLM on the NPU may requires more amount of RAM reserved.
+
+For this case, just replace the `0x1000` (in HEX Bytes) with the size you want.
+
+e.g. To reserve 20GB of RAM for `mmz` on a 32GB RAM board:
+
+```
+=> env set -f bootcmd 'fdt mmz mmz_nid_0_part_0 0x300000000 0x500000000;bootflow scan -lb'; env save
+Saving Environment to SPIFlash... Erasing SPI flash...Writing to SPI flash...done
+OK
+=> boot
+Added mmz_nid_0_part_0 to reserved-memory node, addr=0x300000000, size=0x500000000
+Scanning for bootflows in all bootdevs
+...(Normal boot process)...
+```
+
 
 ## GPG key expired when running apt update
 

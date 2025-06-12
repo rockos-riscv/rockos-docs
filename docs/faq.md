@@ -86,7 +86,7 @@ sudo apt install -y eswin-eic7x-gpu
 
 可通过 `Zink` 来使用 `OpenGL`。
 
-执行如下命令，可全局启用 `Zink` 支持：
+执行如下命令，可**全局**启用 `Zink` 支持：
 
 ```shell
 sudo cp -vrf /usr/share/xorg/glx/extensions/ /usr/lib/xorg/modules/
@@ -142,6 +142,24 @@ Swap:             0B          0B          0B
 ```
 
 如需恢复，将 `bootcmd` 还原回 `bootflow scan -lb`，然后 `env save` 即可。
+
+### 为 `mmz` 保留更多内存
+
+某些特定场景下，您可能想为 `mmz` 预留更多内存，例如：在 NPU 上运行 LLM 时需要大量内存。
+
+这种情况下，将上述命令中的 `0x1000` （十六进制，单位为 Byte）替换成所需内存大小即可。
+
+例如，在 32G 版本的开发板上预留 20G 内存：
+
+```
+=> env set -f bootcmd 'fdt mmz mmz_nid_0_part_0 0x300000000 0x500000000;bootflow scan -lb'; env save
+Saving Environment to SPIFlash... Erasing SPI flash...Writing to SPI flash...done
+OK
+=> boot
+Added mmz_nid_0_part_0 to reserved-memory node, addr=0x300000000, size=0x500000000
+Scanning for bootflows in all bootdevs
+...(正常启动流程)...
+```
 
 ## 运行 apt update 时，提示 GPG 签名过期
 
