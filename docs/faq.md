@@ -4,39 +4,13 @@
 
 ## 独立显卡相关
 
-### 我的 AMD RDNA（或更新）显卡不工作，开机时会出现 Kernel Oops
+### 我希望禁用集成 Imagination GPU 及板载 HDMI 输出（即切换至仅使用独立显卡）
 
-此问题与 AMD 显卡的 PCI-E D3cold 相关。
+安装独立显卡后，默认仍仅从板载 HDMI 接口输出。
 
-解决方案：编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
+需要进行以下操作，禁用核心显卡和显示输出，并切换 `Mesa` 版本。
 
-`pcie_port_pm=off`
-
-您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
-
-编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`。
-
-如果此时已经安装了显卡，可能会出现无法重启的情况，可以使用 `SysRq` 的方式强制重启：
-
-```shell
-sync
-sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
-sudo sh -c 'echo b > /proc/sysrq-trigger'
-```
-
-### 我安装了一张独立显卡，但是开机时死机
-
-很可能您遇到了供电不足。请使用 ATX 而非 DC 电源。
-
-根据 PCI-E 规范，PCI-E 插槽供电需要 75W 供电能力，如果使用 12V 5A 的 60W DC 供电则可能会供电不足，进而无法正常开机。
-
-### 独立显卡无显示输出
-
-这是由于系统默认使用了 Imagination GPU 以及板载的 HDMI 接口输出。
-
-我们需要修改配置，禁用核心显卡和显示输出，并切换 `Mesa` 版本。
-
-与上述 D3cold 问题的方法类似，我们可以编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
+编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
 
 `initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm`
 
@@ -69,6 +43,7 @@ sudo apt purge -y eswin-eic7x-gpu
 
 ```shell
 # 移除先前添加的 PCI-E 和 blacklist 参数
+# pcie_port_pm=off initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm
 sudo nano /etc/default/u-boot
 sudo u-boot-update
 # 切换 Mesa 版本
@@ -81,6 +56,32 @@ sudo rm -vrf /usr/lib/xorg/modules/extensions
 # 恢复 GPU 软件包及其配置
 sudo apt install -y eswin-eic7x-gpu
 ```
+
+### 我的 AMD RDNA（或更新）显卡不工作，开机时会出现 Kernel Oops
+
+此问题与 AMD 显卡的 PCI-E D3cold 相关。
+
+解决方案：编辑 `/etc/default/u-boot`，在 `U_BOOT_PARAMETERS` 部分添加如下内容：
+
+`pcie_port_pm=off`
+
+您可使用 `nano` 编辑：`sudo nano /etc/default/u-boot`
+
+编辑完成后，按 `Ctrl+X` 按提示保存，然后运行 `sudo u-boot-update`。
+
+如果此时已经安装了显卡，可能会出现无法重启的情况，可以使用 `SysRq` 的方式强制重启：
+
+```shell
+sync
+sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
+sudo sh -c 'echo b > /proc/sysrq-trigger'
+```
+
+### 安装独立显卡后，开机时死机
+
+很可能您遇到了供电不足。请使用 ATX 而非 DC 电源。
+
+根据 PCI-E 规范，PCI-E 插槽供电需要 75W 供电能力，如果使用 12V 5A 的 60W DC 供电则可能会供电不足，进而无法正常开机。
 
 ## 我需要 Imagination GPU 上的 OpenGL 支持
 

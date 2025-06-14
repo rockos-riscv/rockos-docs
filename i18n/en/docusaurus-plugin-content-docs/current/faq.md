@@ -4,39 +4,13 @@ Some common Q&As for RockOS.
 
 ## dGPU related
 
-### My AMD RDNA (or newer) GPU isn't working, with Kernel Oops on boot
+### I want to disable the integrated Imagination GPU and onboard HDMI output (i.e. use dGPU only)
 
-This is related to AMD GPUs' PCI-E D3cold.
+By default, after installing a dedicated GPU (or dGPU in short), the system will still only output video via the onboard HDMI port.
 
-To solve this, edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
+We need to change the configurations, disable the integrated GPU (or iGPU in short) and display output, and switch `Mesa` version.
 
-`pcie_port_pm=off`
-
-You can use `nano` to edit: `sudo nano /etc/default/u-boot`
-
-After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update`.
-
-If you already installed the dGPU, you might not be able to perform a system reboot. You can use `SysRq` to do a force reboot:
-
-```shell
-sync
-sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
-sudo sh -c 'echo b > /proc/sysrq-trigger'
-```
-
-### I installed a dGPU but the system freezes on boot
-
-It's very likely that you have insufficient power supply. Please use ATX PSU rather than DC PSU.
-
-According to PCI-E specifications, PCI-E slot requires 75W of power, while using a 12V 5A 60W DC PSU might not be enough, thus causing a boot failure.
-
-### No video output on dGPU
-
-This is because the system is configured to use the Imagination GPU and onboard HDMI output by default.
-
-We need to change the configurations, disable the iGPU and display output, and switch `Mesa` version.
-
-Like the D3cold workaround above, we can edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
+Edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
 
 `initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm`
 
@@ -69,6 +43,7 @@ It's basically doing the opposite.
 
 ```shell
 # Remove PCI-E and blacklist parameters you previously added
+# pcie_port_pm=off initcall_blacklist=es_drm_init module_blacklist=pvrsrvkm
 sudo nano /etc/default/u-boot
 sudo u-boot-update
 # Switch Mesa version
@@ -81,6 +56,32 @@ sudo rm -vrf /usr/lib/xorg/modules/extensions
 # Restore GPU package and it's configuration
 sudo apt install -y eswin-eic7x-gpu
 ```
+
+### My AMD RDNA (or newer) GPU isn't working, with Kernel Oops on boot
+
+This is related to AMD GPUs' PCI-E D3cold.
+
+To solve this, edit `/etc/default/u-boot`, add the following parameters in `U_BOOT_PARAMETERS` section:
+
+`pcie_port_pm=off`
+
+You can use `nano` to edit: `sudo nano /etc/default/u-boot`
+
+After editing, press `Ctrl+X` and follow the prompts to save, then run `sudo u-boot-update`.
+
+If you already installed the dGPU, you might not be able to perform a system reboot. You can use `SysRq` to do a force reboot:
+
+```shell
+sync
+sudo sh -c 'echo 1 > /proc/sys/kernel/sysrq'
+sudo sh -c 'echo b > /proc/sysrq-trigger'
+```
+
+### I installed a dGPU but the system freezes on boot
+
+It's very likely that you have insufficient power supply. Please use ATX PSU rather than DC PSU.
+
+According to PCI-E specifications, PCI-E slot requires 75W of power, while using a 12V 5A 60W DC PSU might not be enough, thus causing a boot failure.
 
 ## I need OpenGL on the integrated Imagination GPU
 
