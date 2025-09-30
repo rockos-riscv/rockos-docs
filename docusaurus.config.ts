@@ -9,10 +9,10 @@ const config: Config = {
   favicon: 'img/plct-logo.png',
 
   // Set the production url of your site here
-  url: 'https://rockos-riscv.github.io',
+  url: 'https://docs.rockos.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/rockos-docs/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
