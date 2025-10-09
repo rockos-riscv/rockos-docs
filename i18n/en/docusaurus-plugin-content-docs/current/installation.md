@@ -31,7 +31,7 @@ For bootloader, boot and root images, download from [here](https://mirror.iscas.
 
 After downloading, please extract the boot and rootfs files. 
 
-If you want to upgrade bootchain via a USB drive, copy the `bootloader_secboot_ddr5_milkv-megrez.bin` file into the drive's first FAT32/EXT4 partition.
+If you want to upgrade bootloader via a USB drive, copy the `bootloader_secboot_ddr5_milkv-megrez.bin` file into the drive's first FAT32/EXT4 partition.
 
 On Linux, install `zstd` and decompress the iamge.
 
@@ -39,13 +39,13 @@ On Windows, you can use tools like 7-zip or Nanazip.
 
 ### Flashing Image
 
-#### Upgrading bootchain firmware (recommended)
+#### Upgrading bootloader firmware (recommended)
 
 First of all we should upgrade the firmware, a.k.a. bootchain for EIC7700X boards.
 
 In short, you need to load the firmware into RAM, then run `es_burn` to write the firmware to onboard SPI Flash.
 
-To load the bootchain file, you have a few options:
+To load the bootloader file, you have a few options:
 
 - From an internal or external storage device
     - `ext4load`
@@ -127,7 +127,7 @@ Other wise you might see your MAC address is regenerated on every boot.
 
 #### Flash to eMMC via `fastboot`
 
-After upgrading the bootchain, power on the board, type `s` to interrupt autoboot, then following these steps:
+After upgrading the bootloader, power on the board, type `s` to interrupt autoboot, then following these steps:
 
 1. In U-Boot console: `fastboot usb 0`
 
@@ -138,8 +138,8 @@ After upgrading the bootchain, power on the board, type `s` to interrupt autoboo
 (On Linux, you'll need `sudo`, or add VID:PID 3452:7700 to your udev rules.)
 
 ```shell
-fastboot flash boot boot-rockos-20250423-145338.ext4
-fastboot flash root root-rockos-20250423-145338.ext4
+fastboot flash boot boot-rockos-20250818-234921.ext4
+fastboot flash root root-rockos-20250818-234921.ext4
 ```
 
 4. Wait for the flashing process to complete. After that, press Ctrl+C in U-Boot console, then type `reset` to reboot.
@@ -159,22 +159,12 @@ Just use `etcher` or `dd` to write the sdcard image into SSD or microSD.
 For Windows users, Rufus is also okay.
 
 ```shell
-sudo dd if=sdcard-rockos-20250423-145338.img of=/dev/sdX bs=1M status=progress; sync
+sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
 ```
 
 :::tip
 Since the bootloader is inside the onboard SPI Flash, if you have any troubles booting from microSD or SSD, update the bootloader first and then retry.
 :::
-
-### Other Notes
-
-It is recommended to do a system upgrade after booting into the system.
-
-```shell
-sudo apt update; sudo apt upgrade -y; sudo reboot
-```
-
-Default username and password are both: `debian`
 
 ## SiFive HiFive Premier P550
 
@@ -283,3 +273,173 @@ Return to the minicom terminal, press Ctrl+C or enter to exit fastboot mode, and
 At this point, the RockOS image flashing is complete.
 
 <!-- ![neofetch](./image%20for%20flash/neofetch.png) -->
+
+## PINE64 StarPro64
+
+### Hardware requirements
+
+- PINE64 StarPro64 board
+- USB A to A cable (or USB A to C cable)
+- DC 12V power supply
+- eMMC module / PCI-E SSD (M.2 NVMe SSD adapter card needed) / microSD card
+    - You can choose any of the storage devices as boot media, but you can only use one at a time.
+- USB-UART serial debugger
+- Ethernet cable
+    - Use `dhcp` or `tftpboot` to load bootloader from the network
+- (Optional) Keyboard, mouse, monitor
+- (Optional) M.2 SSD to USB enclosure
+    - For flashing the system image to SSD
+- (Optional) microSD card reader
+    - For flashing the system image to microSD card
+
+### Image download
+
+Please download bootloader, boot and root image from [here](https://mirror.iscas.ac.cn/rockos/images/generic/latest/).
+
+- BootFS: `boot-rockos-*.ext4.zst`
+- RootFS: `root-rockos-*.ext4.zst`
+- microSD and SSD:`sdcard-rockos-*.img.zst`
+- Bootloader: `bootloader_secboot_ddr5_pine64-starpro64.bin`
+
+Please decompress bootfs and rootfs images after downloading.
+
+If you want to upgrade bootloader firmware via a USB drive, please copy `bootloader_secboot_ddr5_pine64-starpro64.bin` to the drive's first FAT32 or EXT4 partition.
+
+(The stock bootloader may not recognize USB devices, in this case, use network loading instead.)
+
+You may rename it to a shorter file name for convenience.
+
+On Linux, install `zstd` to decompress.
+
+On Windows, use software like 7-zip or Nanazip to decompress.
+
+### Flashing the image
+
+#### Update bootloader firmware (recommended)
+
+In short, you need to load the firmware into RAM, then run `es_burn` to write the firmware to onboard SPI Flash.
+
+If your board is the stock bootloader (shipped with the board, never upgraded), your bootloader may not pick up USB devices.
+
+In this case, use either `tftpboot` or `dhcp`.
+
+1. Connect USB-Uart to the board.
+
+See below for UART GND/TX/RX connections.
+
+| Debugger | Board             |
+|----------|-------------------|
+| GND      | GND               |
+| TX       | RX                |
+| RX       | TX                |
+| 3V3      | NC/DO NOT CONNECT |
+
+![Board](/static/img/installation/starpro64-uart-0.jpg)
+
+![Board](/static/img/installation/starpro64-uart-1.jpg)
+
+2. Open serial console.
+
+On Linux, use `tio` or `minicom`.
+
+On Windows, use`PuTTY` or `SimplySerial`.
+
+The default baud rate is: `115200`.
+
+3. Plug in the power, the board will power on automatically.
+
+Make sure the boot device is installed before powering on.
+
+4. When prompting `Autoboot in 5 seconds`, press `s` to interrupt autoboot.
+
+##### Update via TFTP
+
+Set up a TFTP Server.
+
+For Windows you may use [TFTPd64](https://pjo2.github.io/tftpd64/), for Linux you may use `tftp-hpa`, `atftp`, or even `dnsmasq` has a TFTP server built in.
+
+Please check your distros' documations for usage.
+
+Or you may want to check out Arch Wiki [here](https://wiki.archlinux.org/title/TFTP#Server).
+
+Make sure the TFTP server is serving the `bootloader_secboot_ddr5_pine64-starpro64.bin` file at the root directory.
+
+Then check your computer's LAN IP.
+
+Make sure the board is plugged in to ethernet.
+
+After interrupting the autoboot, type:
+
+```shell
+dhcp 0x90000000 $hostIPaddr:bootloader_secboot_ddr5_pine64-starpro64.bin
+es_burn write 0x90000000 flash; reset
+```
+
+As said above, it is recommended to reset U-Boot env vars to default and save after upgrading:
+
+```shell
+env default -a -f; env save; reset
+```
+
+Other wise you might see your MAC address is regenerated on every boot.
+
+####  `fastboot` 烧录镜像至 eMMC
+
+After upgrading the bootloader, power on the board, type `s` to interrupt autoboot, then following these steps:
+
+0. If this is the first time flashing the image, please run `run gpt_partition` in U-Boot console to repartition the eMMC.
+
+1. Enter fastboot mode: `fastboot usb 0`
+
+2. Connect your board with your PC with USB A to A cable.
+
+(If your PC only have USB Type-C, USB C to A cable can also work, with Type-C side to the PC, and Type-A side to the board)
+
+There are 2 blue USB 3.0 ports on StarPro64. When specifying `usb 0`, use the port below.
+
+Your computer should pick up a `USB download gadget` / `Android Bootloader Interface`.
+
+3. Use `fastboot` to flash the firmware.
+
+(On Linux, you'll need `sudo`, or add VID:PID 3452:7700 to your udev rules.)
+
+```shell
+fastboot flash boot boot-rockos-20250818-234921.ext4
+fastboot flash root root-rockos-20250818-234921.ext4
+```
+
+4. Wait for the flashing process to complete. After that, press Ctrl+C in U-Boot console, then type `reset` to reboot.
+
+5. You're good to go.
+
+:::note
+Though U-Boot supports `fastboot udp` over network, it is way much slower.
+
+This is usually not recommended unless you're doing it complete remotely, without physical access to the board.
+:::
+
+#### Flash to SSD, microSD or eMMC via the adapter
+
+Just use `etcher` or `dd` to write the sdcard image into SSD or microSD.
+
+If your board comes with eMMC and its adapter, you can dd the image into eMMC as well.
+
+For Windows users, Rufus is also okay.
+
+```shell
+sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
+```
+
+:::tip
+Since the bootloader is inside the onboard SPI Flash, if you have any troubles booting from microSD or SSD, update the bootloader first and then retry.
+:::
+
+## Other Notes
+
+It is recommended to do a system upgrade after booting into the system.
+
+```shell
+sudo apt update; sudo apt upgrade -y; sudo reboot
+```
+
+Default username and password are both: `debian`
