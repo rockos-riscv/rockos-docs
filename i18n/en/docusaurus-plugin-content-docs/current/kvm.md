@@ -9,14 +9,20 @@ Currently the following are verified as working:
 - FreeBSD 14.1-RELEASE
 - Debian testing netinst CD
 
+Other versions are not tested, but they should also work with the same steps below.
+
+If not, feel free to open an issue at [rockos-riscv/rockos](https://github.com/rockos-riscv/rockos/issues).
+
 Boards currently verified as working:
 
 - Milk-V Megrez
 - SiFive HiFive Premier P550
+- PINE64 StarPro64
 
 ## Environment
 
-- OS Version: RockOS [20241117](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241130/20241117/)
+- OS Version: RockOS [latest](https://mirror.iscas.ac.cn/rockos/images/generic/latest/)
+- KVM Demo: [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)
 - Ubuntu preinstalled image: https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -39,7 +45,7 @@ Currently QEMU does not support loading M Mode firmware via `-bios` while KVM is
     - EDK II comes with `qemu-efi-riscv64` package
 - Use `-initrd` `-kernel` `-append` flags
     - You can boot Ubuntu with this method.
-    - The BusyBox KVM Demo is also using this method.
+    - The BusyBox KVM [Demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/) is also using this method.
     - You can also boot FreeBSD this way according to [FreeBSD Wiki](https://wiki.freebsd.org/riscv/QEMU#Boot_FreeBSD).
         - Not tested & not demonstrated in this article.
 
@@ -276,9 +282,16 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
 
 ### Method C: Directly load vmlinuz and initrd
 
-In RockOS system image, we have a `busybox` based KVM demo built in, at `/home/debian` for users to try out.
+We have a `busybox` based KVM demo available at: [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)
 
-Usage: just execute `/home/debian/start_kvm.sh`.
+Download and start it up:
+
+```shell
+wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/rootfs_kvm_guest.img
+wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/start_vm.sh
+chmod +x start_vm.sh
+./start_vm.sh
+```
 
 Aside from that, you can also boot Ubuntu using the similar steps.
 

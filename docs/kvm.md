@@ -9,14 +9,20 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
 - FreeBSD 14.1-RELEASE
 - Debian testing netinst CD
 
+其它版本未经验证，但使用下述方法应当能够正常工作。
+
+若无法正常启动，欢迎在 [rockos-riscv/rockos](https://github.com/rockos-riscv/rockos/issues) 提出 issue。
+
 已验证支持的硬件：
 
 - Milk-V Megrez
 - SiFive HiFive Premier P550
+- PINE64 StarPro64
 
 ## 演示环境
 
-- 系统版本：RockOS [20241117](https://mirror.iscas.ac.cn/rockos/extra/images/evb1/20241130/20241117/)
+- 系统版本：RockOS [latest](https://mirror.iscas.ac.cn/rockos/images/generic/latest/)
+- KVM Demo: [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)
 - Ubuntu 预安装镜像：https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
 - openEuler 24.09 QEMU: https://repo.openeuler.org/openEuler-24.09/virtual_machine_img/riscv64/
 - FreeBSD 14.1-RELEASE: https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/
@@ -39,7 +45,7 @@ RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化�
     - `qemu-efi-riscv64` 包也提供 EDK II 固件。
 - 手动指定 `-initrd` `-kernel` `-append` 参数
     - Ubuntu 可用此方法启动。
-    - 系统自带的 Busybox KVM Demo 也是基于此方式启动。
+    - 系统自带的 Busybox KVM [Demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)  也是基于此方式启动。
     - 根据 FreeBSD [文档](https://wiki.freebsd.org/riscv/QEMU#Boot_FreeBSD)，FreeBSD 也可使用此方式启动。
         - 未测试，本文未演示。
 
@@ -276,9 +282,16 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
 
 ### 方法三：直接加载 vmlinuz 和 initrd
 
-RockOS 的系统镜像中，在 `/home/debian` 目录下自带了一个基于 `busybox` 的 KVM 示例，可供参考。
+我们提供了一个基于 `busybox` 的 KVM 示例，可在 [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/) 下载。
 
-使用方式：直接运行 `/home/debian/start_kvm.sh` 即可。
+下载并启动：
+
+```shell
+wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/rootfs_kvm_guest.img
+wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/start_vm.sh
+chmod +x start_vm.sh
+./start_vm.sh
+```
 
 除此以外，Ubuntu 也可以使用此方式启动。需要先从系统镜像中提取 `initrd` 和 `vmlinuz`。
 
