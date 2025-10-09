@@ -334,9 +334,9 @@ See below for UART GND/TX/RX connections.
 | RX       | TX                |
 | 3V3      | NC/DO NOT CONNECT |
 
-![Board](/static/img/installation/starpro64-uart-0.jpg)
+![Board](/img/installation/starpro64-uart-0.jpg)
 
-![Board](/static/img/installation/starpro64-uart-1.jpg)
+![Board](/img/installation/starpro64-uart-1.jpg)
 
 2. Open serial console.
 

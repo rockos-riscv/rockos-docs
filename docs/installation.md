@@ -329,9 +329,9 @@ UART GND/TX/RX 对应关系及位置如下：
 | RX     | TX      |
 | 3V3    | NC/不接 |
 
-![Board](/static/img/installation/starpro64-uart-0.jpg)
+![Board](/img/installation/starpro64-uart-0.jpg)
 
-![Board](/static/img/installation/starpro64-uart-1.jpg)
+![Board](/img/installation/starpro64-uart-1.jpg)
 
 2. 打开串口控制台。
 
