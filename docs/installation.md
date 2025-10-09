@@ -8,7 +8,7 @@
 - USB A to C / USB C to C 线缆
 - DC 12V 或 ATX 电源
 - eMMC 模块/M.2 SATA SSD / PCI-E SSD（M.2 NVMe SSD 需要转接卡）/ microSD 存储卡
-    - 任选一种存储设备即可，但不可同时插入多个烧录了系统的存储介质
+    - 任选一种存储设备即可，但不可同时安装多个烧录了系统的存储介质
 - （可选）键盘、鼠标、显示器、网线
 - （可选）M.2 SDIO Wi-Fi 模块
 - （可选）以 FAT32 或 EXT4 格式化的 U 盘一个，用于升级 bootloader 固件
@@ -29,7 +29,7 @@
 
 bootfs 及 rootfs 请下载后进行解压。
 
-如果您想通过 U 盘更新 bootchain 固件，则请将 `bootloader_secboot_ddr5_milkv-megrez.bin` 复制到 U 盘的第一个 FAT32 或 EXT4 分区。您可将其重命名成较短的文件名，以便稍后操作。
+如果您想通过 U 盘更新 bootloader 固件，则请将 `bootloader_secboot_ddr5_milkv-megrez.bin` 复制到 U 盘的第一个 FAT32 或 EXT4 分区。您可将其重命名成较短的文件名，以便稍后操作。
 
 Linux 环境下，请安装 `zstd` 后进行解压。
 
@@ -37,13 +37,11 @@ Windows 下，可使用 7-zip / Nanazip 等软件解压。
 
 ### 刷写镜像
 
-#### 更新 bootchain 固件（推荐）
-
-首先我们应该更新固件，即 EIC7700X 开发板上的 bootchain 固件。
+#### 更新 bootloader 固件（推荐）
 
 简单来说，您需要将固件加载进内存，然后运行 `es_burn` 来将固件烧录至板载 SPI Flash 中。
 
-有如下几种方式加载 bootchain 文件：
+有如下几种方式加载 bootloader 文件：
 
 - 从内部或外部存储设备
     - `ext4load`
@@ -68,7 +66,7 @@ Windows 下，可使用 7-zip / Nanazip 等软件解压。
 
 确保引导设备在上电前已正确安装。
 
-如果您想从 U 盘更新 bootchain，请在上电前就将其插入。务必插到靠近 3.5mm 一侧的两个 USB 口中，否则可能会无法识别。
+如果您想从 U 盘更新 bootloader，请在上电前就将其插入。务必插到靠近 3.5mm 一侧的两个 USB 口中，否则可能会无法识别。
 
 4. 控制台提示 `Autoboot in 5 seconds` 时，按 `s` 打断自动启动。
 
@@ -123,7 +121,7 @@ env default -a -f; env save; reset
 
 #### 通过 `fastboot` 烧录镜像至 eMMC
 
-更新好 bootchain 后，给开发板上电，按 `s` 打断启动，然后执行如下步骤：
+更新好 bootloader 后，给开发板上电，按 `s` 打断启动，然后执行如下步骤：
 
 1. 在 U-Boot 控制台：`fastboot usb 0`
 
@@ -134,8 +132,8 @@ env default -a -f; env save; reset
 （在 Linux 上你将需要 `sudo`，或者将 VID:PID 3452:7700 添加进你的 udev 规则。）
 
 ```shell
-fastboot flash boot boot-rockos-20250423-145338.ext4
-fastboot flash root root-rockos-20250423-145338.ext4
+fastboot flash boot boot-rockos-20250818-234921.ext4
+fastboot flash root root-rockos-20250818-234921.ext4
 ```
 
 4. 等待刷写过程结束。结束后，在 U-Boot 控制台按 Ctrl+C，然后输入 `reset` 重启。
@@ -159,18 +157,8 @@ fastboot flash root root-rockos-20250423-145338.ext4
 :::
 
 ```shell
-sudo dd if=sdcard-rockos-20250423-145338.img of=/dev/sdX bs=1M status=progress; sync
+sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
 ```
-
-### 其它说明
-
-开机进入系统后，推荐进行一次系统更新。
-
-```shell
-sudo apt update; sudo apt upgrade -y; sudo reboot
-```
-
-默认用户名和密码均为：`debian`
 
 ## SiFive HiFive Premier P550
 
@@ -204,12 +192,12 @@ sudo apt update; sudo apt upgrade -y; sudo reboot
 :::
 
 <!-- ![uart](./image%20for%20flash/uart.png) -->
-| 序号 | 设备 |
-| :-: | :-: |
-| 00 | SOC JTAG (eic7700x mcpu) |
-| 01 | MCU JTAG (stm32) |
-| 02 | SOC UART (eic7700x uart0) |
-| 03 | MCU UART (stm32 uart3) |
+| 序号 |           设备            |
+|:----:|:-------------------------:|
+|  00  | SOC JTAG (eic7700x mcpu)  |
+|  01  |     MCU JTAG (stm32)      |
+|  02  | SOC UART (eic7700x uart0) |
+|  03  |  MCU UART (stm32 uart3)   |
 
 ```bash
 sudo minicom -D /dev/ttyUSB2 -b 115200
@@ -282,3 +270,171 @@ sudo fastboot flash root root-eswin_evb-20241024-145708.ext4 # 刷写rootfs
 至此 RockOS 镜像刷写完成。
 
 <!-- ![neofetch](./image%20for%20flash/neofetch.png) -->
+
+## PINE64 StarPro64
+
+### 硬件准备
+
+- PINE64 StarPro64 开发板本体
+- USB A to A 线缆（或 USB A to C 线缆）
+- DC 12V 电源
+- eMMC 模块 / PCI-E SSD（M.2 NVMe SSD 需要转接卡）/ microSD 存储卡
+    - 任选一种存储设备即可，但不可同时安装多个烧录了系统的存储介质
+- USB-UART 调试器
+- 网线
+    - 使用 `dhcp` 或 `tftpboot`，从网络载入 bootloader 固件
+- （可选）键盘、鼠标、显示器
+- （可选）M.2 SATA / PCI-E 转 USB 硬盘盒
+    - 用于刷写镜像至 SSD
+- （可选）microSD 读卡器
+    - 用于烧写镜像至 microSD 卡
+
+### 镜像下载
+
+请从 [此处](https://mirror.iscas.ac.cn/rockos/images/generic/latest/) 下载 bootloader, boot 和 root 镜像。
+
+- BootFS: `boot-rockos-*.ext4.zst`
+- RootFS: `root-rockos-*.ext4.zst`
+- microSD 卡和 SSD：`sdcard-rockos-*.img.zst`
+- Bootloader: `bootloader_secboot_ddr5_milkv-starpro64.bin`
+
+bootfs 及 rootfs 请下载后进行解压。
+
+如果您想通过 U 盘更新 bootloader 固件，则请将 `bootloader_secboot_ddr5_milkv-starpro64.bin` 复制到 U 盘的第一个 FAT32 或 EXT4 分区。您可将其重命名成较短的文件名，以便稍后操作。
+
+（出厂固件可能无法正确识别 U 盘，如遇到此问题请从网络加载固件）
+
+Linux 环境下，请安装 `zstd` 后进行解压。
+
+Windows 下，可使用 7-zip / Nanazip 等软件解压。
+
+### 刷写镜像
+
+#### 更新 bootloader 固件（推荐）
+
+简单来说，您需要将固件加载进内存，然后运行 `es_burn` 来将固件烧录至板载 SPI Flash 中。
+
+若您的开发板使用的出厂固件（未曾升级过），USB 设备可能无法识别，此时考虑通过网络加载固件。
+
+可考虑使用 `tftpboot` 或 `dhcp`。
+
+1. 将 USB-UART 调试器连接到开发板。
+
+UART GND/TX/RX 对应关系及位置如下：
+
+| 调试器 | 开发板  |
+|--------|---------|
+| GND    | GND     |
+| TX     | RX      |
+| RX     | TX      |
+| 3V3    | NC/不接 |
+
+![Board](/static/img/installation/starpro64-uart-0.jpg)
+
+![Board](/static/img/installation/starpro64-uart-1.jpg)
+
+2. 打开串口控制台。
+
+在 Linux 上，可以使用 `tio` `minicom` 等工具。
+
+在 Windows 上可以使用 `PuTTY` `SimplySerial` 等工具。
+
+开发板默认波特率为 115200。
+
+3. 现在接入电源，开发板应当会自动上电开机。
+
+确保引导设备在上电前已正确安装。
+
+4. 控制台提示 `Autoboot in 5 seconds` 时，按 `s` 打断自动启动。
+
+##### 通过 TFTP 更新
+
+设置一个 TFTP 服务器。
+
+对于 Windows 用户，可使用 [TFTPd64](https://pjo2.github.io/tftpd64/)；对于 Linux 用户，可使用 `tftp-hpa` 或 `atftp`，除此以外 `dnsmasq` 也有一个内置的 TFTP 服务器可用。
+
+可以参考 [Arch Wiki](https://wiki.archlinux.org/title/TFTP#Server) 提供的相关文档。
+
+确保 TFTP 服务器在根目录提供了 `bootloader_secboot_ddr5_pine64-starpro64` 文件。
+
+检查您计算机的 LAN IP 地址。
+
+确保开发板连接到了以太网。注意：只有下方的以太网接口在 U-Boot 中可用。
+
+打断自动启动后，运行：
+
+```shell
+dhcp 0x90000000 $hostIPaddr:bootloader_secboot_ddr5_pine64-starpro64.bin
+es_burn write 0x90000000 flash; reset
+```
+
+重启后，建议重置 U-Boot 环境变量至默认值并保存：
+
+```shell
+env default -a -f; env save; reset
+```
+
+否则可能会出现每次重启时 MAC 地址都会重新生成的问题。
+
+#### 通过 `fastboot` 烧录镜像至 eMMC
+
+更新好 bootloader 后，给开发板上电，按 `s` 打断启动，然后执行如下步骤：
+
+0. 如果是首次刷写，请在 U-Boot 控制台内执行如下命令，重新创建 eMMC 分区表：`run gpt_partition`
+
+1. 进入 fastboot 模式：`fastboot usb 0`
+
+2. 使用 USB A to A 线缆连接您的计算机和开发板。
+
+（如果您的计算机只有 USB Type-C 口可用，也可以使用 USB C to A 线缆，Type-C 一侧插入计算机，Type-A 一侧插入开发板。）
+
+StarPro64 上有两个蓝色的 USB 3.0 接口，指定 `usb 0` 时，请使用靠下的接口。
+
+计算机上应该会识别到一个 `USB download gadget` 或 `Android Bootloader Interface` 设备。
+
+3. 使用 `fastboot` 刷写固件。
+
+（在 Linux 上需要 `sudo`，或者将 VID:PID 3452:7700 添加进你的 `udev` 规则。）
+
+```shell
+fastboot flash boot boot-rockos-20250818-234921.ext4
+fastboot flash root root-rockos-20250818-234921.ext4
+```
+
+4. 等待刷写过程结束。结束后，在 U-Boot 控制台按 Ctrl+C，然后输入 `reset` 重启。
+
+5. 至此，一切就绪。
+
+:::note
+虽然 U-Boot 也支持通过 `fastboot udp` 从网络刷写，但速度相对要慢很多。
+
+通常不推荐从网络刷写，除非您完全远程操作。
+:::
+
+#### 烧录至 SSD 或 microSD
+
+使用 `etcher` 或 `dd` 来将 sdcard 镜像写入 SSD 或 microSD 即可。
+
+对于 Windows 用户，也可使用 Rufus。
+
+:::tip
+从 microSD/SSD 启动时如果遇到问题，可尝试更新位于板载 SPI Flash 上的 bootloader。
+:::
+
+:::tip
+如果您有直接烧录 eMMC 的工具（例如 eMMC 读卡器、eMMC 转 SD 转接板等），也可以直接将 sdcard 镜像烧录至 eMMC 内。
+:::
+
+```shell
+sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
+```
+
+## 其它说明
+
+开机进入系统后，推荐进行一次系统更新。
+
+```shell
+sudo apt update; sudo apt upgrade -y; sudo reboot
+```
+
+默认用户名和密码均为：`debian`
