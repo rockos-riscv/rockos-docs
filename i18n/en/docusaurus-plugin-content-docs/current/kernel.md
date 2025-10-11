@@ -1,0 +1,55 @@
+# Build kernel
+
+By following this article, you can build the kernel deb packages, including native and cross compile.
+
+You can do the native compile on RockOS; the cross compile process below is verified on Debian 13 (Trixie).
+
+The produced `.deb` packages are located in the upper directory of the kernel source, which you can install via `dpkg -i`.
+
+## Native compile
+
+```shell
+#!/bin/sh
+sudo apt update; sudo apt install -y git gdisk dosfstools build-essential \
+                                  libncurses-dev gawk flex bison openssl libssl-dev tree \
+                                  dkms libelf-dev libudev-dev libpci-dev libiberty-dev autoconf \
+                                  device-tree-compiler xz-utils devscripts ccache debhelper asciidoc \
+                                  bc rsync cpio bc rsync cpio python3-dev wget gcc
+export board=win2030
+git clone --depth=1 https://github.com/rockos-riscv/rockos-kernel
+pushd rockos-kernel
+export KDEB_PKGVERSION="$(make kernelversion)-$(date "+%Y.%m.%d.%H.%M")+$(git rev-parse --short HEAD)"
+make ${board}_defconfig
+make -j$(nproc) dtbs
+make -j$(nproc) bindeb-pkg LOCALVERSION="-${board}"
+# The debs file will be generated at ../
+popd
+```
+
+## Cross compile
+
+We're using Debian 13 (Trixie) as an example here.
+
+You may do the compile inside a Docker container if you need to.
+
+Note: Debian 13 uses `GCC 14.2` as of the time writing.
+
+```shell
+#!/bin/sh
+sudo apt update; sudo apt install -y git gdisk dosfstools build-essential \
+                                  libncurses-dev gawk flex bison openssl libssl-dev tree \
+                                  dkms libelf-dev libudev-dev libpci-dev libiberty-dev autoconf \
+                                  device-tree-compiler xz-utils devscripts ccache debhelper asciidoc \
+                                  bc rsync cpio bc rsync cpio python3-dev wget gcc-riscv64-linux-gnu
+export ARCH=riscv
+export board=win2030
+export CROSS_COMPILE=riscv64-linux-gnu-
+git clone --depth=1 https://github.com/rockos-riscv/rockos-kernel
+pushd rockos-kernel
+export KDEB_PKGVERSION="$(make kernelversion)-$(date "+%Y.%m.%d.%H.%M")+$(git rev-parse --short HEAD)"
+make ${board}_defconfig
+make -j$(nproc) dtbs
+make -j$(nproc) bindeb-pkg LOCALVERSION="-${board}"
+# The debs file will be generated at ../
+popd
+```
