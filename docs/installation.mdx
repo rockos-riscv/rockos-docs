@@ -1,6 +1,14 @@
+---
+hide_table_of_contents: true
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 镜像刷写教程
 
-## Milk-V Megrez
+<Tabs groupId="device">
+  <TabItem value="megrez" label="Milk-V Megrez">
 
 ### 准备工作
 
@@ -160,7 +168,8 @@ fastboot flash root root-rockos-20250818-234921.ext4
 sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
 ```
 
-## SiFive HiFive Premier P550
+  </TabItem>
+  <TabItem value="p550" label="SiFive HiFive Premier P550">
 
 ### 准备工作
 
@@ -271,7 +280,8 @@ sudo fastboot flash root root-eswin_evb-20241024-145708.ext4 # 刷写rootfs
 
 <!-- ![neofetch](./image%20for%20flash/neofetch.png) -->
 
-## PINE64 StarPro64
+  </TabItem>
+  <TabItem value="starpro64" label="PINE64 StarPro64">
 
 ### 硬件准备
 
@@ -428,6 +438,9 @@ fastboot flash root root-rockos-20250818-234921.ext4
 ```shell
 sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; sync
 ```
+
+  </TabItem>
+</Tabs>
 
 ## 其它说明
 
