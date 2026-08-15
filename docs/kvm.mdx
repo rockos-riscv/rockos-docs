@@ -73,7 +73,7 @@ sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 
 以 Ubuntu 预安装服务器镜像、FreeBSD 和 Debian netinst CD 为例。
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
@@ -148,7 +148,7 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 > 目前的 EDK II 固件在提示 `Press ESCAPE within 5 seconds for boot options` 时可能需要等待较久时间（~50s）。按 Enter 可跳过。
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="openeuler" label="openEuler">
 
 获取并解压系统镜像：
@@ -303,7 +303,7 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
 
 ### 方法三：直接加载 vmlinuz 和 initrd
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="busybox" label="Busybox 示例">
 
 我们提供了一个基于 `busybox` 的 KVM 示例，可在 [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/) 下载。

@@ -73,7 +73,7 @@ sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 
 For this method, we have Ubuntu preinstalled server image, FreeBSD and Debian netinst CD as examples.
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
@@ -148,7 +148,7 @@ For openEuler use the EDK II firmware distributed with the main system image; fo
 
 > Current version of EDK II might get stuck at `Press ESCAPE within 5 seconds for boot options` (~50s). Press Enter to skip.
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="openeuler" label="openEuler">
 
 Obtain and decompress the image:
@@ -303,7 +303,7 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
 
 ### Method C: Directly load vmlinuz and initrd
 
-<Tabs groupId="os">
+<Tabs>
   <TabItem value="busybox" label="Busybox demo">
 
 We have a `busybox` based KVM demo available at: [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)
