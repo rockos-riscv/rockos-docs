@@ -1,6 +1,14 @@
+---
+hide_table_of_contents: true
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Image Flashing Guide
 
-## Milk-V Megrez
+<Tabs groupId="device">
+  <TabItem value="megrez" label="Milk-V Megrez">
 
 ### Preparation
 
@@ -166,7 +174,8 @@ sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; 
 Since the bootloader is inside the onboard SPI Flash, if you have any troubles booting from microSD or SSD, update the bootloader first and then retry.
 :::
 
-## SiFive HiFive Premier P550
+  </TabItem>
+  <TabItem value="p550" label="SiFive HiFive Premier P550">
 
 ### Hardware requirements
 
@@ -274,7 +283,8 @@ At this point, the RockOS image flashing is complete.
 
 <!-- ![neofetch](./image%20for%20flash/neofetch.png) -->
 
-## PINE64 StarPro64
+  </TabItem>
+  <TabItem value="starpro64" label="PINE64 StarPro64">
 
 ### Hardware requirements
 
@@ -383,7 +393,7 @@ env default -a -f; env save; reset
 
 Other wise you might see your MAC address is regenerated on every boot.
 
-####  `fastboot` 烧录镜像至 eMMC
+#### Flash to eMMC via `fastboot`
 
 After upgrading the bootloader, power on the board, type `s` to interrupt autoboot, then following these steps:
 
@@ -433,6 +443,9 @@ sudo dd if=sdcard-rockos-20250818-234921.img of=/dev/sdX bs=1M status=progress; 
 :::tip
 Since the bootloader is inside the onboard SPI Flash, if you have any troubles booting from microSD or SSD, update the bootloader first and then retry.
 :::
+
+  </TabItem>
+</Tabs>
 
 ## Other Notes
 

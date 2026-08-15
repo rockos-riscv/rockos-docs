@@ -1,3 +1,11 @@
+---
+toc_min_heading_level: 2
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # KVM Demo
 
 RockOS supports KVM virtualization based on H Extension (RISC-V Hypervisor Extension).
@@ -65,7 +73,8 @@ sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 
 For this method, we have Ubuntu preinstalled server image, FreeBSD and Debian netinst CD as examples.
 
-#### Ubuntu
+<Tabs groupId="os">
+  <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
@@ -81,7 +90,8 @@ The default username and password are both `ubuntu`.
 
 For Ubuntu preinstalled image, you'll be prompted to change your password on first boot. Follow the steps and you're good to go.
 
-#### FreeBSD
+  </TabItem>
+  <TabItem value="freebsd" label="FreeBSD">
 
 ```shell
 wget https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
@@ -95,7 +105,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 Use username `root` for a passwordless login.
 
-#### Debian cloud
+  </TabItem>
+  <TabItem value="debian-cloud" label="Debian cloud">
 
 Debian sid currently provides qcow2 disk images.
 
@@ -108,7 +119,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
         -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
 ```
 
-#### Debian testing netinst CD
+  </TabItem>
+  <TabItem value="debian-netinst" label="Debian netinst CD">
 
 ```shell
 wget https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
@@ -125,6 +137,9 @@ Execute the commands above will create a 16G qcow2 disk image, and bring you to 
 
 After the installation process, power off the VM, delete `-boot d -cdrom debian-testing-riscv64-netinst.iso \`, and then you can boot straight into the installed system.
 
+  </TabItem>
+</Tabs>
+
 ### Method B: Use other firmware (e.g. TianoCore EDK II)
 
 Currently, openEuler, Ubuntu and Debian are verified.
@@ -133,7 +148,8 @@ For openEuler use the EDK II firmware distributed with the main system image; fo
 
 > Current version of EDK II might get stuck at `Press ESCAPE within 5 seconds for boot options` (~50s). Press Enter to skip.
 
-#### openEuler
+<Tabs groupId="os">
+  <TabItem value="openeuler" label="openEuler">
 
 Obtain and decompress the image:
 
@@ -253,7 +269,8 @@ Default password: `openEuler12#$`
 
 If needed, you can press ESC to interrupt EDK II autoboot while promting `Press ESCAPE within 5 seconds for boot options`, and enter EDK II menu to edit settings.
 
-#### Ubuntu
+  </TabItem>
+  <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
@@ -267,7 +284,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
         -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
 ```
 
-#### Debian cloud
+  </TabItem>
+  <TabItem value="debian-cloud" label="Debian cloud">
 
 ```shell
 wget https://cdimage.debian.org/images/cloud/sid/daily/latest/debian-sid-nocloud-riscv64-daily.qcow2
@@ -280,7 +298,13 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
         -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
 ```
 
+  </TabItem>
+</Tabs>
+
 ### Method C: Directly load vmlinuz and initrd
+
+<Tabs groupId="os">
+  <TabItem value="busybox" label="Busybox demo">
 
 We have a `busybox` based KVM demo available at: [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/)
 
@@ -292,6 +316,9 @@ wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/start_vm.sh
 chmod +x start_vm.sh
 ./start_vm.sh
 ```
+
+  </TabItem>
+  <TabItem value="ubuntu" label="Ubuntu">
 
 Aside from that, you can also boot Ubuntu using the similar steps.
 
@@ -323,6 +350,9 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 The default username and password are both `ubuntu`.
 
 For Ubuntu preinstalled image, you'll be prompted to change your password on first boot. Follow the steps and you're good to go.
+
+  </TabItem>
+</Tabs>
 
 ## Screen Records
 
