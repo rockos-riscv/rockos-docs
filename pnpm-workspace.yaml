@@ -1,0 +1,6 @@
+allowBuilds:
+  core-js: true
+  core-js-pure: true
+overrides:
+  webpackbar: 6.0.1
+  webpack: 5.104.1
