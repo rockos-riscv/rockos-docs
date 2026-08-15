@@ -50,12 +50,7 @@ const ICONS = {
 };
 
 export const ProjectIcon = ({ type }) => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    style={{ width: '2rem', height: '2rem', flexShrink: 0 }}
-    {...STROKE}
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...STROKE}>
     {ICONS[type] || ICONS.kernel}
   </svg>
 );

@@ -1,107 +1,30 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import projs from "./projects.json"
-import { Card } from 'antd';
-import { GithubOutlined } from '@ant-design/icons';
 import { translate } from '@docusaurus/Translate';
-import Link from '@docusaurus/Link';
-import { ProjectIcon } from '@site/src/components/ProjectIcon';
+import projs from "./projects.json"
+import { ProjectCard } from '@site/src/components/ProjectCard';
+import styles from './index.module.css';
 
 const ProjectList = () => {
   return (
-    <Layout title="Hello" description="Hello React Page">
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: "column",
-          height: "100%",
-          width: "100%",
-          fontSize: '20px',
-        }}>
-        <div style={{ width: "75%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Card title={
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-              overflow: "hidden"
-            }}>
-              <p style={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                flexGrow: 1,
-                marginTop: "1rem",
-                marginBottom: "0px",
-                color: "white",
-                fontSize: "1.5rem",
-              }}>
-                {translate({ id: "rockos 项目列表", message: "rockos 项目列表" })}
-                <span style={{ color: "#d1d1d1", fontSize: "0.8rem", fontWeight: "50", display: "block" }}>{translate({ id: "rockos 下的所有项目仓库", message: "rockos 下的所有项目仓库" })}</span>
-              </p>
-            </div>
-          }
-            headStyle={{ borderBottom: "none" }}
-            style={{ backgroundColor: "#2a6f97", marginTop: "1rem", width: "60%", border: "none" }}
-          >
-          </Card>
+    <Layout title="rockos 项目列表" description="rockos 项目列表">
+      <div className={styles.container}>
+        <div className={styles.intro}>
+          <h1 className={styles.introTitle}>
+            {translate({ id: "rockos 项目列表", message: "rockos 项目列表" })}
+          </h1>
+          <p className={styles.introSubtitle}>
+            {translate({ id: "rockos 下的所有项目仓库", message: "rockos 下的所有项目仓库" })}
+          </p>
+          <p className={styles.introCount}>
+            {translate({ id: "共 {count} 个项目", message: `共 ${projs.length} 个项目` }, { count: projs.length })}
+          </p>
         </div>
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: "1rem",
-          width: "50%",
-          marginTop: "1rem",
-          marginBottom: "1rem"
-        }}>
-          {projs && projs.map((item, idx) => (
-            <div key={idx} style={{
-              width: "calc(50% - 1rem)",
-              display: "flex"
-            }}>
-              <Link to={item.link} style={{ width: "100%" }}>
-                <Card
-                  hoverable
-                  headStyle={{ display: "flex", alignItems: "center", marginBottom: "0px" }}
-                  title={
-                    <div style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "0.5rem",
-                      overflow: "hidden"
-                    }}>
-                      <ProjectIcon type={item.icon} />
-                      <p style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        flexGrow: 1,
-                        marginTop: "1rem",
-                        marginBottom: "0px"
-                      }}>
-                        {translate({ id: item.title, message: item.title })}
-                        <span style={{ color: "grey", fontSize: "0.8rem", display: "block" }}>{item.repo}</span>
-                      </p>
-                    </div>
-                  }
-                >
-                  <p style={{ marginBottom: "0.5rem" }}>{translate({ id: item.description, message: item.description })}</p>
-                  <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "0.35rem", color: "grey", fontSize: "0.8rem" }}>
-                    <GithubOutlined style={{ fontSize: "0.9rem" }} />
-                    <span>GitHub</span>
-                    <span>→</span>
-                  </div>
-                </Card>
-              </Link>
-            </div>
+        <div className={styles.cardListContainer}>
+          {projs && projs.map((item) => (
+            <ProjectCard key={item.repo} {...item} />
           ))}
         </div>
-
       </div>
     </Layout >
   );

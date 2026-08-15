@@ -1,0 +1,79 @@
+/* Page container */
+.container {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 3rem 0 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+/* Dark mode */
+:root {
+  --background-color: #f9f9f9;
+  --text-color: #333;
+  --intro-background: #fff;
+  --intro-border: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+  --background-color: #1a1a1a;
+  --text-color: #fff;
+  --intro-background: #1f1f23;
+  --intro-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Hero section */
+.intro {
+  width: 80%;
+  max-width: 1200px;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: var(--intro-background);
+  border: 1px solid var(--intro-border);
+  border-radius: 12px;
+}
+
+.introTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.introSubtitle {
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.introCount {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* Card list container */
+.cardListContainer {
+  width: 80%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+@media screen and (max-width: 480px) {
+  .intro,
+  .cardListContainer {
+    width: 92%;
+  }
+
+  .cardListContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .introTitle {
+    font-size: 2rem;
+  }
+}
