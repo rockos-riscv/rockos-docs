@@ -5,6 +5,27 @@
   "rockos 下的所有项目仓库": {
     "message": "All project repositories under rockos"
   },
+  "共 {count} 个项目": {
+    "message": "{count} projects"
+  },
+  "在 GitHub 查看": {
+    "message": "View on GitHub"
+  },
+  "内核": {
+    "message": "Kernel"
+  },
+  "启动": {
+    "message": "Boot"
+  },
+  "固件": {
+    "message": "Firmware"
+  },
+  "插件": {
+    "message": "Plugin"
+  },
+  "影音": {
+    "message": "Media"
+  },
   "rockos 内核仓库": {
     "message": "rockos kernel repo"
   },

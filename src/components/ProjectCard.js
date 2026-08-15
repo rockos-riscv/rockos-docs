@@ -5,11 +5,11 @@ import styles from './ProjectCard.module.css';
 
 // Short type label shown in the corner badge, keyed by the `icon` field.
 const ICON_LABELS = {
-  kernel: '内核',
-  bootloader: '启动',
-  firmware: '固件',
-  plugin: '插件',
-  media: '影音',
+  kernel: translate({ id: '内核', message: '内核' }),
+  bootloader: translate({ id: '启动', message: '启动' }),
+  firmware: translate({ id: '固件', message: '固件' }),
+  plugin: translate({ id: '插件', message: '插件' }),
+  media: translate({ id: '影音', message: '影音' }),
 };
 
 export const ProjectCard = ({ title, repo, description, link, icon }) => (
