@@ -1,3 +1,10 @@
+---
+hide_table_of_contents: true
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 构建内核
 
 本文提供了构建内核 deb 包的方式，包括原生编译和交叉编译。
@@ -6,7 +13,8 @@
 
 编译产物为 `.deb` 包，位于内核源代码目录上一级，可使用 `dpkg -i` 进行安装。
 
-## 原生编译
+<Tabs groupId="kernel-build">
+  <TabItem value="native" label="原生编译">
 
 ```shell
 #!/bin/sh
@@ -26,7 +34,8 @@ make -j$(nproc) bindeb-pkg LOCALVERSION="-${board}"
 popd
 ```
 
-## 交叉编译
+  </TabItem>
+  <TabItem value="cross" label="交叉编译">
 
 以 Debian 13 (Trixie) 为例。
 
@@ -53,3 +62,6 @@ make -j$(nproc) bindeb-pkg LOCALVERSION="-${board}"
 # The debs file will be generated at ../
 popd
 ```
+
+  </TabItem>
+</Tabs>

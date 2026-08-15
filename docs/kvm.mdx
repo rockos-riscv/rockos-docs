@@ -1,3 +1,11 @@
+---
+toc_min_heading_level: 2
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # KVM 示例
 
 RockOS 支持基于 H 扩展（RISC-V Hypervisor Extension）的 KVM 虚拟化。
@@ -65,7 +73,8 @@ sudo apt update; sudo apt install -y wget u-boot-qemu qemu-efi-riscv64
 
 以 Ubuntu 预安装服务器镜像、FreeBSD 和 Debian netinst CD 为例。
 
-#### Ubuntu
+<Tabs groupId="os">
+  <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
@@ -81,7 +90,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 Ubuntu 的预安装镜像在首次启动时会提示修改密码，按提示操作即可。
 
-#### FreeBSD
+  </TabItem>
+  <TabItem value="freebsd" label="FreeBSD">
 
 ```shell
 wget https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/riscv64/Latest/FreeBSD-14.1-RELEASE-riscv-riscv64.qcow2.xz
@@ -95,7 +105,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 可使用默认的 `root` 用户免密码登录。
 
-#### Debian cloud
+  </TabItem>
+  <TabItem value="debian-cloud" label="Debian cloud">
 
 Debian sid 已经提供了 qcow2 格式的硬盘镜像。
 
@@ -108,7 +119,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
         -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
 ```
 
-#### Debian testing netinst CD
+  </TabItem>
+  <TabItem value="debian-netinst" label="Debian netinst CD">
 
 ```shell
 wget https://cdimage.debian.org/cdimage/weekly-builds/riscv64/iso-cd/debian-testing-riscv64-netinst.iso
@@ -125,6 +137,9 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 系统安装结束后，正常关闭虚拟机，删除启动选项中的 `-boot d -cdrom debian-testing-riscv64-netinst.iso \` 部分，即可开机进入安装后的系统。
 
+  </TabItem>
+</Tabs>
+
 ### 方法二：使用其它固件（如 EDK II）
 
 目前已经验证了 openEuler RISC-V 24.09、Ubuntu、Debian 均可使用 EDK II 进行启动。
@@ -133,7 +148,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 
 > 目前的 EDK II 固件在提示 `Press ESCAPE within 5 seconds for boot options` 时可能需要等待较久时间（~50s）。按 Enter 可跳过。
 
-#### openEuler
+<Tabs groupId="os">
+  <TabItem value="openeuler" label="openEuler">
 
 获取并解压系统镜像：
 
@@ -253,7 +269,8 @@ sudo qemu-system-riscv64 \
 
 如有需要，您也可以在启动后出现 `Press ESCAPE within 5 seconds for boot options` 提示时，按 ESC 打断 EDK II 的自动启动，进入 EDK II 菜单调整设置。
 
-#### Ubuntu
+  </TabItem>
+  <TabItem value="ubuntu" label="Ubuntu">
 
 ```shell
 wget https://cdimage.ubuntu.com/releases/24.10/release/ubuntu-24.10-preinstalled-server-riscv64.img.xz
@@ -267,7 +284,8 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
         -drive file=ubuntu-24.10-preinstalled-server-riscv64.img,format=raw,if=virtio
 ```
 
-#### Debian cloud
+  </TabItem>
+  <TabItem value="debian-cloud" label="Debian cloud">
 
 ```shell
 wget https://cdimage.debian.org/images/cloud/sid/daily/latest/debian-sid-nocloud-riscv64-daily.qcow2
@@ -280,7 +298,13 @@ sudo qemu-system-riscv64 --enable-kvm -M virt,pflash0=pflash0,pflash1=pflash1,ac
         -drive file=debian-sid-nocloud-riscv64-daily.qcow2,format=qcow2,if=virtio
 ```
 
+  </TabItem>
+</Tabs>
+
 ### 方法三：直接加载 vmlinuz 和 initrd
+
+<Tabs groupId="os">
+  <TabItem value="busybox" label="Busybox 示例">
 
 我们提供了一个基于 `busybox` 的 KVM 示例，可在 [kvm_demo](https://mirror.iscas.ac.cn/revyos/extra/kvm_demo/) 下载。
 
@@ -292,6 +316,9 @@ wget https://fast-mirror.isrc.ac.cn/revyos/extra/kvm_demo/start_vm.sh
 chmod +x start_vm.sh
 ./start_vm.sh
 ```
+
+  </TabItem>
+  <TabItem value="ubuntu" label="Ubuntu">
 
 除此以外，Ubuntu 也可以使用此方式启动。需要先从系统镜像中提取 `initrd` 和 `vmlinuz`。
 
@@ -321,6 +348,9 @@ sudo qemu-system-riscv64 --enable-kvm -M virt -cpu host -m 2048 -smp 2 -nographi
 默认用户名和密码均为 `ubuntu`。
 
 Ubuntu 的预安装镜像在首次启动时会提示修改密码，按提示操作即可。
+
+  </TabItem>
+</Tabs>
 
 ## 屏幕录像
 
