@@ -5,6 +5,7 @@ import { Card } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 import { translate } from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+import { ProjectIcon } from '@site/src/components/ProjectIcon';
 
 const ProjectList = () => {
   return (
@@ -74,7 +75,7 @@ const ProjectList = () => {
                       gap: "0.5rem",
                       overflow: "hidden"
                     }}>
-                      <GithubOutlined style={{ fontSize: "2rem", flexShrink: 0 }} />
+                      <ProjectIcon type={item.icon} />
                       <p style={{
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -89,7 +90,12 @@ const ProjectList = () => {
                     </div>
                   }
                 >
-                  <p>{translate({ id: item.description, message: item.description })}</p>
+                  <p style={{ marginBottom: "0.5rem" }}>{translate({ id: item.description, message: item.description })}</p>
+                  <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "0.35rem", color: "grey", fontSize: "0.8rem" }}>
+                    <GithubOutlined style={{ fontSize: "0.9rem" }} />
+                    <span>GitHub</span>
+                    <span>→</span>
+                  </div>
                 </Card>
               </Link>
             </div>

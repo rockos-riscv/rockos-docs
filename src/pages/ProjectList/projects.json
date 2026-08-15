@@ -3,30 +3,35 @@
     "title": "rockos 内核仓库",
     "repo": "rockos-kernel",
     "description": "rockos linux kernel",
+    "icon": "kernel",
     "link": "https://github.com/rockos-riscv/rockos-kernel"
   },
   {
     "title": "rockos u-boot 仓库",
     "repo": "rockos-u-boot",
     "description": "rockos u-boot repo",
+    "icon": "bootloader",
     "link": "https://github.com/rockos-riscv/rockos-u-boot"
   },
   {
     "title": "rockos opensbi 仓库",
     "repo": "rockos-opensbi",
     "description": "rockos opensbi repo",
+    "icon": "firmware",
     "link": "https://github.com/rockos-riscv/rockos-opensbi"
   },
   {
     "title": "gst-plugins-es 仓库",
     "repo": "gst-plugins-es",
     "description": "eic770x gst plugin repo",
+    "icon": "plugin",
     "link": "https://github.com/rockos-riscv/gst-plugins-es"
   },
   {
     "title": "rockos ffmpeg 仓库",
     "repo": "rockos-ffmpeg",
     "description": "eic770x ffmpeg repo",
+    "icon": "media",
     "link": "https://github.com/rockos-riscv/rockos-ffmpeg"
   }
 ]
